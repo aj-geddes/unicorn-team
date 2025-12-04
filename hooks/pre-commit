@@ -1,0 +1,273 @@
+#!/usr/bin/env bash
+set -e
+
+echo "🔍 Pre-commit Quality Gate"
+echo "══════════════════════════════════════"
+
+# Detect language/project type
+LANG="unknown"
+if [[ -f "pyproject.toml" ]] || [[ -f "requirements.txt" ]]; then
+    LANG="python"
+elif [[ -f "package.json" ]]; then
+    LANG="javascript"
+elif [[ -f "go.mod" ]]; then
+    LANG="go"
+elif [[ -f "Cargo.toml" ]]; then
+    LANG="rust"
+fi
+
+echo "📦 Detected language: $LANG"
+echo ""
+
+# Language-specific checks
+case $LANG in
+    python)
+        echo "🐍 Python Checks"
+        echo "─────────────────────"
+
+        # Ruff linting
+        echo -n "  Linting (ruff check)... "
+        if ruff check . &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Linting failed. Run: ruff check ."
+            exit 1
+        fi
+
+        # Ruff formatting
+        echo -n "  Format check (ruff format)... "
+        if ruff format --check . &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Format check failed. Run: ruff format ."
+            exit 1
+        fi
+
+        # Type checking with mypy
+        echo -n "  Type checking (mypy)... "
+        if mypy . --ignore-missing-imports &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Type checking failed. Run: mypy ."
+            exit 1
+        fi
+
+        # Tests with coverage
+        echo -n "  Tests with coverage... "
+        if pytest --cov=. --cov-fail-under=80 -q &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Tests failed or coverage < 80%. Run: pytest --cov=. --cov-fail-under=80"
+            exit 1
+        fi
+
+        # Security scan with bandit
+        echo -n "  Security scan (bandit)... "
+        if bandit -r . -q &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Security issues found. Run: bandit -r ."
+            exit 1
+        fi
+        ;;
+
+    javascript)
+        echo "📦 JavaScript Checks"
+        echo "─────────────────────"
+
+        # Linting
+        echo -n "  Linting (npm run lint)... "
+        if npm run lint &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Linting failed. Run: npm run lint"
+            exit 1
+        fi
+
+        # Type checking
+        echo -n "  Type checking... "
+        if npm run type-check &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Type checking failed. Run: npm run type-check"
+            exit 1
+        fi
+
+        # Tests
+        echo -n "  Tests (npm test)... "
+        if npm test &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Tests failed. Run: npm test"
+            exit 1
+        fi
+        ;;
+
+    go)
+        echo "🐹 Go Checks"
+        echo "─────────────────────"
+
+        # Formatting
+        echo -n "  Format check (go fmt)... "
+        UNFORMATTED=$(go fmt ./... 2>&1)
+        if [[ -z "$UNFORMATTED" ]]; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Files need formatting:"
+            echo "$UNFORMATTED"
+            echo "Run: go fmt ./..."
+            exit 1
+        fi
+
+        # Vet
+        echo -n "  Code analysis (go vet)... "
+        if go vet ./... &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Go vet found issues. Run: go vet ./..."
+            exit 1
+        fi
+
+        # Tests with coverage
+        echo -n "  Tests with coverage... "
+        if go test ./... -cover &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Tests failed. Run: go test ./... -cover"
+            exit 1
+        fi
+        ;;
+
+    rust)
+        echo "🦀 Rust Checks"
+        echo "─────────────────────"
+
+        # Formatting
+        echo -n "  Format check (cargo fmt)... "
+        if cargo fmt --check &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Code needs formatting. Run: cargo fmt"
+            exit 1
+        fi
+
+        # Clippy
+        echo -n "  Linting (cargo clippy)... "
+        if cargo clippy -- -D warnings &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Clippy found issues. Run: cargo clippy"
+            exit 1
+        fi
+
+        # Tests
+        echo -n "  Tests (cargo test)... "
+        if cargo test &>/dev/null; then
+            echo "✓"
+        else
+            echo "✗"
+            echo ""
+            echo "❌ Tests failed. Run: cargo test"
+            exit 1
+        fi
+        ;;
+
+    unknown)
+        echo "⚠️  Unknown project type, skipping language-specific checks"
+        ;;
+esac
+
+echo ""
+echo "🔒 Universal Security Checks"
+echo "─────────────────────"
+
+# Check for secrets in staged files
+echo -n "  Checking for secrets... "
+STAGED_FILES=$(git diff --cached --name-only --diff-filter=ACM)
+if [[ -n "$STAGED_FILES" ]]; then
+    SECRET_PATTERNS="password=|api_key=|token=|secret="
+    if echo "$STAGED_FILES" | xargs grep -niE "$SECRET_PATTERNS" 2>/dev/null | grep -v "test"; then
+        echo "✗"
+        echo ""
+        echo "❌ Possible secrets detected in staged files!"
+        echo "   Review and remove sensitive data before committing."
+        exit 1
+    else
+        echo "✓"
+    fi
+else
+    echo "✓ (no staged files)"
+fi
+
+# Check for debug code in staged files (excluding test files)
+echo -n "  Checking for debug code... "
+if [[ -n "$STAGED_FILES" ]]; then
+    DEBUG_PATTERNS="breakpoint\(\)|console\.log\(|^[^#]*print\(|import pdb|debugger;"
+
+    # Filter out test files
+    NON_TEST_FILES=$(echo "$STAGED_FILES" | grep -vE "(test_|_test\.|\.test\.|spec\.)" || true)
+
+    if [[ -n "$NON_TEST_FILES" ]]; then
+        if echo "$NON_TEST_FILES" | xargs grep -nE "$DEBUG_PATTERNS" 2>/dev/null; then
+            echo "✗"
+            echo ""
+            echo "❌ Debug code detected in non-test files!"
+            echo "   Remove breakpoint(), console.log(), print() statements, etc."
+            exit 1
+        else
+            echo "✓"
+        fi
+    else
+        echo "✓ (only test files staged)"
+    fi
+else
+    echo "✓ (no staged files)"
+fi
+
+# Check for TODO/FIXME/HACK markers in staged files
+echo -n "  Checking for TODO markers... "
+if [[ -n "$STAGED_FILES" ]]; then
+    if echo "$STAGED_FILES" | xargs grep -nE "TODO|FIXME|HACK" 2>/dev/null; then
+        echo "✗"
+        echo ""
+        echo "❌ Found TODO/FIXME/HACK markers in staged files!"
+        echo "   Resolve issues or remove markers before committing."
+        exit 1
+    else
+        echo "✓"
+    fi
+else
+    echo "✓ (no staged files)"
+fi
+
+echo ""
+echo "══════════════════════════════════════"
+echo "✅ All pre-commit checks passed!"
+echo "══════════════════════════════════════"
+exit 0
