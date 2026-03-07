@@ -1,308 +1,208 @@
 #!/usr/bin/env bash
 set -e
 
-# Colors for output
-RED='\033[0;31m'
-GREEN='\033[0;32m'
-YELLOW='\033[1;33m'
-BLUE='\033[0;34m'
-CYAN='\033[0;36m'
-NC='\033[0m' # No Color
-
-# Determine script location (absolute path)
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PROJECT_ROOT="$(cd "${SCRIPT_DIR}/.." && pwd)"
 
-# Parse flags
+GREEN='\033[0;32m'
+YELLOW='\033[1;33m'
+CYAN='\033[0;36m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+INSTALL_MODE="project"
 FORCE=false
-HELP=false
 
 for arg in "$@"; do
-    case $arg in
-        --force)
-            FORCE=true
-            shift
+    case "$arg" in
+        --global) INSTALL_MODE="global" ;;
+        --force)  FORCE=true ;;
+        --uninstall)
+            echo -e "${CYAN}Uninstalling...${NC}"
+            rm -rf "$PROJECT_ROOT/.claude/skills"
+            echo -e "${GREEN}Removed .claude/skills/${NC}"
+            exit 0
             ;;
         --help|-h)
-            HELP=true
-            shift
-            ;;
-        *)
+            cat <<'HELP'
+Usage: ./scripts/install.sh [--global] [--force] [--uninstall] [--help]
+
+Install unicorn-team skills into Claude Code.
+
+Options:
+  --global     Install to ~/.claude/skills/ (user-wide, copies files)
+  --force      Overwrite existing skills and hooks
+  --uninstall  Remove installed skills from .claude/skills/
+  --help       Show this message
+
+Default: project-level install to .claude/skills/ (symlinks)
+HELP
+            exit 0
             ;;
     esac
 done
 
-# Help message
-if [ "$HELP" = true ]; then
-    echo -e "${CYAN}10X Developer Unicorn - Installation Script${NC}"
-    echo ""
-    echo "Usage: ./scripts/install.sh [OPTIONS]"
-    echo ""
-    echo "Options:"
-    echo "  --force    Override existing hooks without prompting"
-    echo "  --help     Show this help message"
-    echo ""
-    echo "Installation includes:"
-    echo "  - Git hooks (pre-commit, pre-push)"
-    echo "  - Python dependencies (pytest, ruff, mypy, bandit, coverage)"
-    echo "  - Verification of installation"
-    echo ""
-    echo "This script is non-destructive by default and will warn before"
-    echo "overwriting existing hooks."
-    exit 0
-fi
-
-# Header
-echo -e "${CYAN}"
-echo "════════════════════════════════════════════════════════════"
-echo "  10X Developer Unicorn - Installation"
-echo "════════════════════════════════════════════════════════════"
-echo -e "${NC}"
-
-# Step 1: Check prerequisites
-echo -e "${BLUE}[1/5] Checking prerequisites...${NC}"
-
-# Check for git
-if ! command -v git &> /dev/null; then
-    echo -e "${RED}✗ git is not installed${NC}"
-    echo "Please install git and try again."
-    exit 1
-fi
-echo -e "${GREEN}✓ git found${NC}"
-
-# Check for python3
-if ! command -v python3 &> /dev/null; then
-    echo -e "${RED}✗ python3 is not installed${NC}"
-    echo "Please install python3 and try again."
-    exit 1
-fi
-PYTHON_VERSION=$(python3 --version | cut -d' ' -f2)
-echo -e "${GREEN}✓ python3 found (${PYTHON_VERSION})${NC}"
-
-# Check for pip
-if ! command -v pip3 &> /dev/null && ! python3 -m pip --version &> /dev/null; then
-    echo -e "${RED}✗ pip is not installed${NC}"
-    echo "Please install pip and try again."
-    exit 1
-fi
-echo -e "${GREEN}✓ pip found${NC}"
-
+# ── Header ──────────────────────────────────────────────
 echo ""
+echo -e "${CYAN}Unicorn Team — Claude Code Installer${NC}"
+echo "────────────────────────────────────────"
 
-# Step 2: Detect git repository
-echo -e "${BLUE}[2/5] Detecting git repository...${NC}"
-
-if [ -d "${PROJECT_ROOT}/.git" ]; then
-    echo -e "${GREEN}✓ Git repository detected at: ${PROJECT_ROOT}${NC}"
-    IN_GIT_REPO=true
-    GIT_HOOKS_DIR="${PROJECT_ROOT}/.git/hooks"
-elif git rev-parse --git-dir &> /dev/null; then
-    GIT_ROOT=$(git rev-parse --show-toplevel)
-    echo -e "${GREEN}✓ Git repository detected at: ${GIT_ROOT}${NC}"
-    IN_GIT_REPO=true
-    GIT_HOOKS_DIR="${GIT_ROOT}/.git/hooks"
+if [ "$INSTALL_MODE" = "global" ]; then
+    SKILLS_TARGET="$HOME/.claude/skills"
+    echo -e "Mode: ${YELLOW}global${NC} ($SKILLS_TARGET)"
 else
-    echo -e "${YELLOW}⚠ Not in a git repository${NC}"
-    echo "Hooks will be installed to project but cannot be linked to .git/hooks"
-    IN_GIT_REPO=false
+    SKILLS_TARGET="$PROJECT_ROOT/.claude/skills"
+    echo -e "Mode: ${GREEN}project${NC} (.claude/skills/)"
 fi
-
 echo ""
 
-# Step 3: Create symlinks for hooks
-echo -e "${BLUE}[3/5] Installing git hooks...${NC}"
+# ── Skills ──────────────────────────────────────────────
+echo -e "${CYAN}Skills${NC}"
 
-if [ "$IN_GIT_REPO" = true ]; then
-    # Pre-commit hook
-    SOURCE_PRECOMMIT="${PROJECT_ROOT}/hooks/pre-commit"
-    TARGET_PRECOMMIT="${GIT_HOOKS_DIR}/pre-commit"
+mkdir -p "$SKILLS_TARGET"
 
-    if [ -f "$TARGET_PRECOMMIT" ] || [ -L "$TARGET_PRECOMMIT" ]; then
-        if [ "$FORCE" = true ]; then
-            echo -e "${YELLOW}⚠ Overwriting existing pre-commit hook (--force flag)${NC}"
-            rm -f "$TARGET_PRECOMMIT"
-        else
-            echo -e "${YELLOW}⚠ Pre-commit hook already exists${NC}"
-            read -p "Overwrite? (y/N): " -n 1 -r
-            echo
-            if [[ $REPLY =~ ^[Yy]$ ]]; then
-                rm -f "$TARGET_PRECOMMIT"
-            else
-                echo -e "${YELLOW}Skipping pre-commit hook installation${NC}"
-                SOURCE_PRECOMMIT=""
-            fi
-        fi
+INSTALLED=0
+SKIPPED=0
+
+# Track names to handle collisions (agents/devops vs domain/devops)
+declare -A SEEN_NAMES
+
+while IFS= read -r skill_md; do
+    skill_dir="$(dirname "$skill_md")"
+    skill_name="$(basename "$skill_dir")"
+
+    # On collision, prefix with parent directory name
+    if [[ -v "SEEN_NAMES[$skill_name]" ]]; then
+        parent="$(basename "$(dirname "$skill_dir")")"
+        skill_name="${parent}-${skill_name}"
+    fi
+    SEEN_NAMES["$skill_name"]=1
+
+    link="$SKILLS_TARGET/$skill_name"
+
+    if [ -e "$link" ] && [ "$FORCE" = false ]; then
+        echo -e "  ${YELLOW}~${NC} $skill_name (exists, use --force)"
+        SKIPPED=$((SKIPPED + 1))
+        continue
     fi
 
-    if [ -n "$SOURCE_PRECOMMIT" ]; then
-        if [ -f "$SOURCE_PRECOMMIT" ]; then
-            ln -sf "$SOURCE_PRECOMMIT" "$TARGET_PRECOMMIT"
-            chmod +x "$SOURCE_PRECOMMIT"
-            echo -e "${GREEN}✓ Pre-commit hook installed${NC}"
-        else
-            echo -e "${YELLOW}⚠ Pre-commit hook not found at ${SOURCE_PRECOMMIT}${NC}"
-            echo "  (This is expected if hooks haven't been created yet)"
-        fi
-    fi
-
-    # Pre-push hook
-    SOURCE_PREPUSH="${PROJECT_ROOT}/hooks/pre-push"
-    TARGET_PREPUSH="${GIT_HOOKS_DIR}/pre-push"
-
-    if [ -f "$SOURCE_PREPUSH" ]; then
-        if [ -f "$TARGET_PREPUSH" ] || [ -L "$TARGET_PREPUSH" ]; then
-            if [ "$FORCE" = true ]; then
-                echo -e "${YELLOW}⚠ Overwriting existing pre-push hook (--force flag)${NC}"
-                rm -f "$TARGET_PREPUSH"
-            else
-                echo -e "${YELLOW}⚠ Pre-push hook already exists${NC}"
-                read -p "Overwrite? (y/N): " -n 1 -r
-                echo
-                if [[ $REPLY =~ ^[Yy]$ ]]; then
-                    rm -f "$TARGET_PREPUSH"
-                    ln -sf "$SOURCE_PREPUSH" "$TARGET_PREPUSH"
-                    chmod +x "$SOURCE_PREPUSH"
-                    echo -e "${GREEN}✓ Pre-push hook installed${NC}"
-                else
-                    echo -e "${YELLOW}Skipping pre-push hook installation${NC}"
-                fi
-            fi
-        else
-            ln -sf "$SOURCE_PREPUSH" "$TARGET_PREPUSH"
-            chmod +x "$SOURCE_PREPUSH"
-            echo -e "${GREEN}✓ Pre-push hook installed${NC}"
-        fi
+    if [ "$INSTALL_MODE" = "project" ]; then
+        rel="$(realpath --relative-to="$SKILLS_TARGET" "$skill_dir")"
+        ln -sfn "$rel" "$link"
     else
-        echo -e "${YELLOW}⚠ Pre-push hook not found (will be installed when created)${NC}"
+        rm -rf "$link"
+        cp -r "$skill_dir" "$link"
     fi
+
+    echo -e "  ${GREEN}+${NC} $skill_name"
+    INSTALLED=$((INSTALLED + 1))
+done < <(find "$PROJECT_ROOT/skills" -name "SKILL.md" -type f | sort)
+
+echo -e "  ── ${GREEN}$INSTALLED installed${NC}, $SKIPPED skipped"
+echo ""
+
+# ── Git Hooks ───────────────────────────────────────────
+echo -e "${CYAN}Git Hooks${NC}"
+
+if git -C "$PROJECT_ROOT" rev-parse --git-dir &>/dev/null; then
+    GIT_DIR="$(git -C "$PROJECT_ROOT" rev-parse --absolute-git-dir)"
+    HOOKS_DIR="$GIT_DIR/hooks"
+    mkdir -p "$HOOKS_DIR"
+
+    for hook in pre-commit pre-push; do
+        src="$PROJECT_ROOT/hooks/$hook"
+        dst="$HOOKS_DIR/$hook"
+        [ -f "$src" ] || continue
+
+        if [ -L "$dst" ] && [ "$(readlink -f "$dst")" = "$(readlink -f "$src")" ]; then
+            echo -e "  ${GREEN}✓${NC} $hook (already linked)"
+            continue
+        fi
+
+        if [ -e "$dst" ] && [ "$FORCE" = false ]; then
+            echo -e "  ${YELLOW}~${NC} $hook (exists, use --force)"
+            continue
+        fi
+
+        chmod +x "$src"
+        ln -sf "$src" "$dst"
+        echo -e "  ${GREEN}+${NC} $hook"
+    done
 else
-    echo -e "${YELLOW}⚠ Not in git repository - skipping hook installation${NC}"
+    echo -e "  ${YELLOW}~${NC} Not a git repo — skipping hooks"
 fi
-
 echo ""
 
-# Step 4: Install Python dependencies
-echo -e "${BLUE}[4/5] Installing Python dependencies...${NC}"
+# ── Scripts ─────────────────────────────────────────────
+echo -e "${CYAN}Scripts${NC}"
 
-DEPENDENCIES=(pytest ruff mypy bandit coverage)
-MISSING_DEPS=()
+SCRIPT_COUNT=0
+while IFS= read -r script; do
+    chmod +x "$script"
+    SCRIPT_COUNT=$((SCRIPT_COUNT + 1))
+done < <(find "$PROJECT_ROOT/skills" -path "*/scripts/*.sh" -type f 2>/dev/null)
+chmod +x "$PROJECT_ROOT/scripts/install.sh"
+SCRIPT_COUNT=$((SCRIPT_COUNT + 1))
+echo -e "  ${GREEN}✓${NC} $SCRIPT_COUNT scripts marked executable"
+echo ""
 
-for dep in "${DEPENDENCIES[@]}"; do
-    if ! python3 -m pip show "$dep" &> /dev/null; then
-        MISSING_DEPS+=("$dep")
+# ── CLAUDE.md (global only) ─────────────────────────────
+if [ "$INSTALL_MODE" = "global" ]; then
+    echo -e "${CYAN}CLAUDE.md${NC}"
+    CLAUDE_MD="$HOME/.claude/CLAUDE.md"
+    MARKER_START="<!-- unicorn-team-start -->"
+    MARKER_END="<!-- unicorn-team-end -->"
+
+    ACTIVATION_BLOCK="$MARKER_START
+## Orchestrator Mode (10X Unicorn)
+
+You coordinate the 10X Unicorn agent team. Delegate all substantial work to
+subagents (Agent tool). Never implement complex tasks directly.
+
+- Route tasks using the orchestrator skill's decision tree
+- Enforce TDD: tests first, always (RED -> GREEN -> REFACTOR)
+- Apply quality gates before returning results
+- Each subagent gets fresh 200K context -- use it
+$MARKER_END"
+
+    if [ -f "$CLAUDE_MD" ] && grep -qF "$MARKER_START" "$CLAUDE_MD"; then
+        # Replace existing block
+        sed -i "/$MARKER_START/,/$MARKER_END/c\\$ACTIVATION_BLOCK" "$CLAUDE_MD"
+        echo -e "  ${GREEN}✓${NC} Updated orchestrator block in $CLAUDE_MD"
+    elif [ -f "$CLAUDE_MD" ]; then
+        # Append to existing file
+        printf '\n%s\n' "$ACTIVATION_BLOCK" >> "$CLAUDE_MD"
+        echo -e "  ${GREEN}+${NC} Appended orchestrator block to $CLAUDE_MD"
     else
-        echo -e "${GREEN}✓ ${dep} already installed${NC}"
+        # Create new file
+        mkdir -p "$(dirname "$CLAUDE_MD")"
+        echo "$ACTIVATION_BLOCK" > "$CLAUDE_MD"
+        echo -e "  ${GREEN}+${NC} Created $CLAUDE_MD"
     fi
-done
+    echo ""
+fi
 
-if [ ${#MISSING_DEPS[@]} -gt 0 ]; then
-    echo -e "${CYAN}Installing missing dependencies: ${MISSING_DEPS[*]}${NC}"
-
-    # Try to install without sudo first
-    if python3 -m pip install --user "${MISSING_DEPS[@]}" &> /dev/null; then
-        echo -e "${GREEN}✓ Dependencies installed successfully${NC}"
-    else
-        echo -e "${YELLOW}⚠ Failed to install with pip --user${NC}"
-        echo "You may need to install these manually:"
-        for dep in "${MISSING_DEPS[@]}"; do
-            echo "  - $dep"
-        done
+# ── .gitignore (project only) ──────────────────────────
+if [ "$INSTALL_MODE" = "project" ]; then
+    GITIGNORE="$PROJECT_ROOT/.gitignore"
+    ENTRY=".claude/skills/"
+    if ! grep -qxF "$ENTRY" "$GITIGNORE" 2>/dev/null; then
+        echo "$ENTRY" >> "$GITIGNORE"
+        echo -e "${CYAN}.gitignore${NC}"
+        echo -e "  ${GREEN}+${NC} Added $ENTRY"
         echo ""
-        echo "Try: pip3 install ${MISSING_DEPS[*]}"
     fi
+fi
+
+# ── Summary ─────────────────────────────────────────────
+echo "────────────────────────────────────────"
+TOTAL=$((INSTALLED + SKIPPED))
+echo -e "${GREEN}Done.${NC} $TOTAL skills available to Claude Code."
+echo ""
+if [ "$INSTALL_MODE" = "global" ]; then
+    echo -e "Skills:  ${YELLOW}ls ~/.claude/skills/${NC}"
 else
-    echo -e "${GREEN}✓ All dependencies already installed${NC}"
+    echo -e "Skills:  ${YELLOW}ls .claude/skills/${NC}"
 fi
-
-echo ""
-
-# Step 5: Verify installation
-echo -e "${BLUE}[5/5] Verifying installation...${NC}"
-
-# Check that scripts are executable
-if [ -d "${PROJECT_ROOT}/scripts" ]; then
-    SCRIPTS_COUNT=$(find "${PROJECT_ROOT}/scripts" -type f -name "*.sh" | wc -l)
-    EXECUTABLE_COUNT=$(find "${PROJECT_ROOT}/scripts" -type f -name "*.sh" -executable | wc -l)
-
-    if [ "$SCRIPTS_COUNT" -eq "$EXECUTABLE_COUNT" ]; then
-        echo -e "${GREEN}✓ All scripts are executable (${EXECUTABLE_COUNT}/${SCRIPTS_COUNT})${NC}"
-    else
-        echo -e "${YELLOW}⚠ Some scripts are not executable (${EXECUTABLE_COUNT}/${SCRIPTS_COUNT})${NC}"
-        echo "Making scripts executable..."
-        chmod +x "${PROJECT_ROOT}"/scripts/*.sh 2>/dev/null || true
-        echo -e "${GREEN}✓ Scripts made executable${NC}"
-    fi
-else
-    echo -e "${YELLOW}⚠ Scripts directory not found${NC}"
-fi
-
-# Check that hooks are executable
-if [ -d "${PROJECT_ROOT}/hooks" ]; then
-    if [ -f "${PROJECT_ROOT}/hooks/pre-commit" ]; then
-        if [ -x "${PROJECT_ROOT}/hooks/pre-commit" ]; then
-            echo -e "${GREEN}✓ Pre-commit hook is executable${NC}"
-        else
-            chmod +x "${PROJECT_ROOT}/hooks/pre-commit"
-            echo -e "${GREEN}✓ Pre-commit hook made executable${NC}"
-        fi
-    fi
-
-    if [ -f "${PROJECT_ROOT}/hooks/pre-push" ]; then
-        if [ -x "${PROJECT_ROOT}/hooks/pre-push" ]; then
-            echo -e "${GREEN}✓ Pre-push hook is executable${NC}"
-        else
-            chmod +x "${PROJECT_ROOT}/hooks/pre-push"
-            echo -e "${GREEN}✓ Pre-push hook made executable${NC}"
-        fi
-    fi
-fi
-
-# Check directory structure
-EXPECTED_DIRS=("skills" "hooks" "scripts" "tests" "docs")
-for dir in "${EXPECTED_DIRS[@]}"; do
-    if [ -d "${PROJECT_ROOT}/${dir}" ]; then
-        echo -e "${GREEN}✓ ${dir}/ directory exists${NC}"
-    else
-        echo -e "${YELLOW}⚠ ${dir}/ directory not found${NC}"
-    fi
-done
-
-echo ""
-
-# Success message
-echo -e "${GREEN}"
-echo "════════════════════════════════════════════════════════════"
-echo "  Installation Complete!"
-echo "════════════════════════════════════════════════════════════"
-echo -e "${NC}"
-
-echo -e "${CYAN}Next Steps:${NC}"
-echo ""
-echo "1. Run TDD workflow for a feature:"
-echo -e "   ${YELLOW}./scripts/tdd.sh <feature-name>${NC}"
-echo ""
-echo "2. Self-review before commit:"
-echo -e "   ${YELLOW}./scripts/self-review.sh${NC}"
-echo ""
-echo "3. Estimate a task:"
-echo -e "   ${YELLOW}./scripts/estimate.sh${NC}"
-echo ""
-echo "4. Learn a new language/framework:"
-echo -e "   ${YELLOW}./scripts/new-language.sh <language>${NC}"
-echo ""
-echo "5. Validate all skills:"
-echo -e "   ${YELLOW}pytest tests/test_skills_valid.py -v${NC}"
-echo ""
-echo "6. Run full test suite:"
-echo -e "   ${YELLOW}pytest -v --cov=. --cov-fail-under=80${NC}"
-echo ""
-
-if [ "$IN_GIT_REPO" = true ]; then
-    echo -e "${GREEN}Git hooks are active and will run on commit/push${NC}"
-else
-    echo -e "${YELLOW}To enable git hooks, run this script from within a git repository${NC}"
-fi
-
-echo ""
-echo -e "${CYAN}Project Root: ${PROJECT_ROOT}${NC}"
+echo -e "Test:    ${YELLOW}pytest tests/ -v${NC}"
 echo ""

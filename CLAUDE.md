@@ -1,108 +1,40 @@
 # 10X Developer Unicorn
 
-Complete agent orchestration system for Claude Code.
+Agent orchestration system for Claude Code. 18 skills across 6 agents.
 
-## Status: COMPLETE
+## Orchestrator Mode
 
-All 6 phases implemented. 80+ tests passing. Skills reworked to official Anthropic patterns (2026-03).
+You coordinate the 10X Unicorn agent team. Delegate all substantial work to
+subagents (Agent tool). Never implement complex tasks directly.
 
-## Project Overview
+- Route tasks using the orchestrator skill's decision tree
+- Enforce TDD: tests first, always (RED -> GREEN -> REFACTOR)
+- Apply quality gates before returning results
+- Each subagent gets fresh 200K context -- use it
 
-This project creates a comprehensive agent orchestration system with:
-- Specialized subagents (Architect, Developer, QA, DevOps, Polyglot)
-- Skills matrix (core, domain, meta)
-- Quality enforcement (hooks, scripts, gates)
-- TDD-first development workflow
-
-Model Strategy: Opus everywhere for consistency and quality.
+The orchestrator skill (`skills/agents/orchestrator/SKILL.md`) has the full
+routing table, delegation templates, quality gates, and response format.
 
 ## Quick Start
 
 ```bash
-./scripts/install.sh
-pytest tests/ -v
+./scripts/install.sh        # Symlinks skills into .claude/skills/, wires git hooks
+pytest tests/ -v            # Verify everything passes
 ```
 
-## Architecture Reference
-
-- `docs/architecture.md` - Agent specs, workflows, token management
-- `docs/hidden-skills.md` - The 80% skills (code reading, pattern transfer, etc.)
-- `docs/implementation-guide.md` - Directory structure, quickstart
-- `SYSTEM_PROMPT.md` - Copy to ~/.claude/CLAUDE.md to activate
-
-## Project Structure
-
-```
-unicorn-team/
-├── CLAUDE.md
-├── SYSTEM_PROMPT.md
-├── README.md
-├── docs/
-│   ├── architecture.md
-│   ├── hidden-skills.md
-│   ├── implementation-guide.md
-│   └── TROUBLESHOOTING.md
-├── skills/
-│   ├── unicorn/                       # Meta-skills (7)
-│   │   ├── orchestrator/SKILL.md
-│   │   ├── self-verification/
-│   │   │   ├── SKILL.md
-│   │   │   ├── references/
-│   │   │   └── scripts/self-review.sh
-│   │   ├── code-reading/SKILL.md
-│   │   ├── pattern-transfer/SKILL.md
-│   │   ├── estimation/
-│   │   │   ├── SKILL.md
-│   │   │   ├── references/
-│   │   │   └── scripts/estimate.sh
-│   │   ├── technical-debt/SKILL.md
-│   │   └── language-learning/
-│   │       ├── SKILL.md
-│   │       ├── references/
-│   │       └── scripts/new-language.sh
-│   ├── agents/                        # Agent definitions (5)
-│   │   ├── developer/
-│   │   │   ├── SKILL.md
-│   │   │   ├── references/
-│   │   │   └── scripts/tdd.sh
-│   │   ├── architect/
-│   │   │   ├── SKILL.md
-│   │   │   └── references/
-│   │   ├── qa-security/
-│   │   │   ├── SKILL.md
-│   │   │   └── references/
-│   │   ├── devops/
-│   │   │   ├── SKILL.md
-│   │   │   └── references/
-│   │   └── polyglot/
-│   │       ├── SKILL.md
-│   │       ├── references/
-│   │       └── scripts/new-language.sh
-│   └── domain/                        # Domain skills (5)
-│       ├── python/
-│       ├── javascript/
-│       ├── testing/
-│       ├── security/
-│       └── devops/
-├── hooks/
-│   ├── pre-commit
-│   └── pre-push
-├── scripts/
-│   └── install.sh
-└── tests/
-    ├── test_hooks.py
-    ├── test_scripts.py
-    └── test_skills_valid.py
-```
+Install options:
+- `--global` — copies skills to `~/.claude/skills/` + activates orchestrator in `~/.claude/CLAUDE.md`
+- `--force` — overwrites existing skills and hooks
+- `--uninstall` — removes `.claude/skills/` symlinks
 
 ## Development Rules
 
 ### TDD Always
 ```
-RED: Write failing test first
-GREEN: Minimum code to pass
+RED:      Write failing test first
+GREEN:    Minimum code to pass
 REFACTOR: Improve without changing behavior
-VERIFY: Self-review before commit
+VERIFY:   Self-review before commit
 ```
 
 ### Skill File Standards
@@ -130,7 +62,7 @@ Before any commit:
 - Tests pass (pytest -v)
 - Scripts are executable
 - SKILL.md has valid frontmatter
-- No TODO/FIXME/HACK markers
+- No unresolved task markers
 - Self-review checklist complete
 
 ### Commit Convention
@@ -142,50 +74,6 @@ Types: feat, fix, docs, skill, script, test, refactor
 Scope: orchestrator, developer, qa, devops, hooks, etc.
 ```
 
-## Implementation Status
-
-### Phase 1: Foundation - COMPLETE
-- [x] Directory structure
-- [x] skills/unicorn/orchestrator/SKILL.md
-- [x] skills/unicorn/self-verification/SKILL.md
-- [x] hooks/pre-commit
-- [x] scripts/install.sh
-- [x] Validation tests
-
-### Phase 2: Core Skills - COMPLETE
-- [x] skills/unicorn/code-reading/SKILL.md
-- [x] skills/unicorn/pattern-transfer/SKILL.md
-- [x] skills/unicorn/estimation/SKILL.md
-- [x] skills/unicorn/technical-debt/SKILL.md
-- [x] skills/unicorn/language-learning/SKILL.md
-
-### Phase 3: Agent Definitions - COMPLETE
-- [x] skills/agents/developer/SKILL.md + references/ + scripts/
-- [x] skills/agents/architect/SKILL.md + references/
-- [x] skills/agents/qa-security/SKILL.md + references/
-- [x] skills/agents/devops/SKILL.md + references/
-- [x] skills/agents/polyglot/SKILL.md + references/ + scripts/
-
-### Phase 4: Domain Skills - COMPLETE
-- [x] skills/domain/python/SKILL.md
-- [x] skills/domain/javascript/SKILL.md
-- [x] skills/domain/testing/SKILL.md
-- [x] skills/domain/security/SKILL.md
-- [x] skills/domain/devops/SKILL.md
-
-### Phase 5: Scripts & Automation - COMPLETE
-- [x] skills/agents/developer/scripts/tdd.sh (moved from scripts/)
-- [x] skills/unicorn/self-verification/scripts/self-review.sh (moved from scripts/)
-- [x] skills/unicorn/estimation/scripts/estimate.sh (moved from scripts/)
-- [x] skills/unicorn/language-learning/scripts/new-language.sh (moved from scripts/)
-- [x] hooks/pre-push
-
-### Phase 6: Documentation & Polish - COMPLETE
-- [x] README.md with Mermaid diagrams
-- [x] SYSTEM_PROMPT.md for activation
-- [x] docs/TROUBLESHOOTING.md
-- [x] All skills refactored to <500 lines with references/
-
 ## Commands
 
 ```bash
@@ -196,13 +84,6 @@ Scope: orchestrator, developer, qa, devops, hooks, etc.
 ./skills/unicorn/language-learning/scripts/new-language.sh <lang>  # Language learning
 pytest tests/ -v                                              # Run all tests
 ```
-
-## Token Management
-
-- Keep orchestrator context lean (coordination only)
-- Delegate heavy work to subagents (each gets 200K)
-- Skills lazy-load (body only when triggered)
-- Return summaries, not full outputs
 
 ## Delegation Routing
 
@@ -216,26 +97,11 @@ New language           -> Polyglot subagent
 Complex multi-domain   -> Parallel delegation
 ```
 
-## Success Criteria - ALL MET
+## Architecture Reference
 
-### Functional
-- [x] All skills have valid frontmatter
-- [x] All scripts executable and tested
-- [x] Pre-commit hook catches quality issues
-- [x] TDD workflow enforces red-green-refactor
-- [x] Self-review checklist integrated
-
-### Quality
-- [x] 80+ tests passing
-- [x] No TODO/FIXME/HACK in committed code
-- [x] All skills under 500 lines
-- [x] Documentation complete
-
-### Usability
-- [x] Single-command installation
-- [x] Clear error messages
-- [x] Works with existing Claude Code setup
-- [x] Non-destructive
+- `docs/architecture.md` - Agent specs, workflows, token management
+- `docs/hidden-skills.md` - The 80% skills (code reading, pattern transfer, etc.)
+- `docs/implementation-guide.md` - Directory structure, quickstart
 
 ## Repository
 
