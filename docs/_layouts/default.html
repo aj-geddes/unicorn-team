@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦄</text></svg>">
   {% seo %}
   <script type="application/ld+json">
   {
@@ -418,6 +419,22 @@
       border-radius: 0 0 8px 0;
     }
 
+    /* ===== Mermaid Diagrams ===== */
+    .content pre.mermaid {
+      background-color: var(--bg);
+      border: 1px solid var(--surface);
+      border-radius: 12px;
+      padding: 24px;
+      margin-bottom: 24px;
+      text-align: center;
+      overflow-x: auto;
+    }
+
+    .content pre.mermaid svg {
+      max-width: 100%;
+      height: auto;
+    }
+
     /* ===== Images ===== */
     .content img {
       max-width: 100%;
@@ -622,7 +639,7 @@
   <script type="module">
     import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
     mermaid.initialize({
-      startOnLoad: true,
+      startOnLoad: false,
       theme: 'dark',
       themeVariables: {
         darkMode: true,
@@ -635,6 +652,16 @@
         tertiaryColor: '#313244'
       }
     });
+    // Jekyll renders ```mermaid as <pre><code class="language-mermaid">
+    // Transform them into <pre class="mermaid"> for Mermaid to find
+    document.querySelectorAll('pre > code.language-mermaid').forEach(function(codeEl) {
+      var pre = codeEl.parentElement;
+      var newPre = document.createElement('pre');
+      newPre.className = 'mermaid';
+      newPre.textContent = codeEl.textContent;
+      pre.parentElement.replaceChild(newPre, pre);
+    });
+    await mermaid.run();
   </script>
 
   <!-- Mobile Navigation Toggle -->
