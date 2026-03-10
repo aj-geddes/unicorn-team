@@ -23,84 +23,37 @@ Skills compose. The developer agent draws on `python`, `testing`, and `security`
 
 ## Skill Categories
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#89b4fa', 'primaryTextColor': '#cdd6f4', 'primaryBorderColor': '#74c7ec', 'lineColor': '#a6adc8', 'secondaryColor': '#f5c2e7', 'tertiaryColor': '#1e1e2e', 'background': '#1e1e2e', 'mainBkg': '#313244', 'nodeBorder': '#74c7ec', 'clusterBkg': '#181825', 'titleColor': '#cdd6f4', 'edgeLabelBackground': '#313244'}}}%%
-graph TB
-    subgraph Agents["Agent Skills"]
-        O["orchestrator"]
-        AR["architect"]
-        DEV["developer"]
-        QA["qa-security"]
-        DVO["agent-devops"]
-        PO["polyglot"]
-    end
-
-    subgraph Meta["Meta Skills"]
-        CR["code-reading"]
-        PT["pattern-transfer"]
-        SV["self-verification"]
-        ES["estimation"]
-        TD["technical-debt"]
-        LL["language-learning"]
-        HVS["hvs-skill-buddy"]
-    end
-
-    subgraph Domain["Domain Skills"]
-        PY["python"]
-        JS["javascript"]
-        TE["testing"]
-        SE["security"]
-        DD["domain-devops"]
-    end
-
-    O --> DEV
-    O --> AR
-    O --> QA
-    O --> DVO
-    O --> PO
-
-    DEV --> PY
-    DEV --> JS
-    DEV --> TE
-    DEV --> SE
-    DEV --> CR
-    DEV --> PT
-    DEV --> SV
-
-    PO --> LL
-    PO --> PT
-
-    QA --> SE
-    QA --> TE
-
-    DVO --> DD
-    DVO --> SE
-
-    style Agents fill:#1e1e2e,stroke:#89b4fa,color:#cdd6f4
-    style Meta fill:#1e1e2e,stroke:#cba6f7,color:#cdd6f4
-    style Domain fill:#1e1e2e,stroke:#a6e3a1,color:#cdd6f4
-
-    style O fill:#89b4fa,stroke:#89b4fa,color:#1e1e2e
-    style AR fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-    style DEV fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-    style QA fill:#fab387,stroke:#fab387,color:#1e1e2e
-    style DVO fill:#74c7ec,stroke:#74c7ec,color:#1e1e2e
-    style PO fill:#f9e2af,stroke:#f9e2af,color:#1e1e2e
-
-    style CR fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-    style PT fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-    style SV fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-    style ES fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-    style TD fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-    style LL fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-    style HVS fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-
-    style PY fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-    style JS fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-    style TE fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-    style SE fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-    style DD fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-```
+<div class="diagram">
+  <div class="skill-map">
+    <div class="skill-group" style="border-color: var(--blue);">
+      <div class="skill-group-title text-blue">Agent Skills</div>
+      <span class="skill-tag bg-blue">orchestrator</span>
+      <span class="skill-tag bg-mauve">architect</span>
+      <span class="skill-tag bg-green">developer</span>
+      <span class="skill-tag bg-peach">qa-security</span>
+      <span class="skill-tag bg-teal">agent-devops</span>
+      <span class="skill-tag bg-yellow">polyglot</span>
+    </div>
+    <div class="skill-group" style="border-color: var(--mauve);">
+      <div class="skill-group-title text-mauve">Meta Skills</div>
+      <span class="skill-tag bg-mauve">code-reading</span>
+      <span class="skill-tag bg-mauve">pattern-transfer</span>
+      <span class="skill-tag bg-mauve">self-verification</span>
+      <span class="skill-tag bg-mauve">estimation</span>
+      <span class="skill-tag bg-mauve">technical-debt</span>
+      <span class="skill-tag bg-mauve">language-learning</span>
+      <span class="skill-tag bg-mauve">hvs-skill-buddy</span>
+    </div>
+    <div class="skill-group" style="border-color: var(--green);">
+      <div class="skill-group-title text-green">Domain Skills</div>
+      <span class="skill-tag bg-green">python</span>
+      <span class="skill-tag bg-green">javascript</span>
+      <span class="skill-tag bg-green">testing</span>
+      <span class="skill-tag bg-green">security</span>
+      <span class="skill-tag bg-green">domain-devops</span>
+    </div>
+  </div>
+</div>
 
 ---
 

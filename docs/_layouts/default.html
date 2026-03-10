@@ -419,20 +419,379 @@
       border-radius: 0 0 8px 0;
     }
 
-    /* ===== Mermaid Diagrams ===== */
-    .content pre.mermaid {
-      background-color: var(--bg);
+    /* ===== Diagram Components ===== */
+    .diagram {
+      margin: 32px 0;
+      padding: 32px 24px;
+      background: linear-gradient(135deg, rgba(49, 50, 68, 0.4), rgba(30, 30, 46, 0.8));
       border: 1px solid var(--surface);
-      border-radius: 12px;
-      padding: 24px;
-      margin-bottom: 24px;
-      text-align: center;
+      border-radius: 16px;
       overflow-x: auto;
     }
 
-    .content pre.mermaid svg {
-      max-width: 100%;
-      height: auto;
+    /* Flow: vertical pipeline */
+    .flow {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0;
+    }
+
+    .flow-node {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.95rem;
+      text-align: center;
+      min-width: 140px;
+      position: relative;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .flow-node small {
+      display: block;
+      font-weight: 400;
+      font-size: 0.8rem;
+      opacity: 0.85;
+      margin-top: 2px;
+    }
+
+    .flow-arrow {
+      width: 2px;
+      height: 28px;
+      background: var(--subtext);
+      position: relative;
+    }
+
+    .flow-arrow::after {
+      content: '';
+      position: absolute;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      border-left: 5px solid transparent;
+      border-right: 5px solid transparent;
+      border-top: 6px solid var(--subtext);
+    }
+
+    .flow-arrow-right {
+      width: 28px;
+      height: 2px;
+      background: var(--subtext);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .flow-arrow-right::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 6px solid var(--subtext);
+    }
+
+    /* Horizontal row of nodes */
+    .flow-row {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    /* Fan-out: single node above, multiple below */
+    .flow-fan {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .flow-fan .flow-node {
+      min-width: 110px;
+      font-size: 0.85rem;
+      padding: 10px 16px;
+    }
+
+    /* Converge arrows */
+    .flow-converge {
+      width: 80%;
+      height: 2px;
+      background: linear-gradient(90deg, transparent, var(--subtext) 20%, var(--subtext) 80%, transparent);
+      margin: 0 auto;
+    }
+
+    /* TDD cycle: horizontal loop */
+    .tdd-cycle {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0;
+      flex-wrap: wrap;
+      padding: 8px 0;
+    }
+
+    .tdd-node {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 130px;
+      height: 80px;
+      border-radius: 12px;
+      font-weight: 700;
+      font-size: 1rem;
+      box-shadow: 0 2px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .tdd-node small {
+      font-weight: 400;
+      font-size: 0.75rem;
+      opacity: 0.85;
+      margin-top: 4px;
+    }
+
+    .tdd-arrow {
+      width: 36px;
+      height: 2px;
+      background: var(--subtext);
+      position: relative;
+      flex-shrink: 0;
+    }
+
+    .tdd-arrow::after {
+      content: '';
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-left: 6px solid var(--subtext);
+    }
+
+    .tdd-loop-back {
+      display: flex;
+      justify-content: center;
+      margin-top: 12px;
+    }
+
+    .tdd-loop-line {
+      width: 70%;
+      height: 2px;
+      background: linear-gradient(90deg, var(--subtext), transparent 15%, transparent 85%, var(--subtext));
+      position: relative;
+    }
+
+    .tdd-loop-line::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      border-top: 5px solid transparent;
+      border-bottom: 5px solid transparent;
+      border-right: 6px solid var(--subtext);
+    }
+
+    /* Skill map: grouped boxes */
+    .skill-map {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 20px;
+    }
+
+    .skill-group {
+      border: 1px solid var(--surface);
+      border-radius: 12px;
+      padding: 16px;
+      background: rgba(30, 30, 46, 0.6);
+    }
+
+    .skill-group-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 12px;
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--surface);
+    }
+
+    .skill-group .skill-tag {
+      display: inline-block;
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin: 3px;
+    }
+
+    /* Sequence: vertical timeline */
+    .sequence {
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+      position: relative;
+      padding-left: 20px;
+    }
+
+    .seq-step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      padding: 12px 0;
+      position: relative;
+    }
+
+    .seq-step::before {
+      content: '';
+      position: absolute;
+      left: -20px;
+      top: 0;
+      bottom: 0;
+      width: 2px;
+      background: var(--surface);
+    }
+
+    .seq-step:last-child::before {
+      bottom: 50%;
+    }
+
+    .seq-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 6px;
+      position: relative;
+      left: -25px;
+      margin-right: -10px;
+    }
+
+    .seq-content {
+      flex: 1;
+    }
+
+    .seq-label {
+      font-weight: 600;
+      font-size: 0.9rem;
+      margin-bottom: 2px;
+    }
+
+    .seq-detail {
+      font-size: 0.85rem;
+      color: var(--subtext);
+    }
+
+    .seq-gate {
+      margin: 8px 0;
+      padding: 8px 14px;
+      border-left: 3px solid var(--green);
+      background: rgba(166, 227, 161, 0.06);
+      border-radius: 0 8px 8px 0;
+      font-size: 0.85rem;
+      color: var(--green);
+      font-weight: 500;
+    }
+
+    /* Color utilities */
+    .bg-pink    { background-color: #f5c2e7; color: var(--bg); }
+    .bg-blue    { background-color: var(--blue); color: var(--bg); }
+    .bg-mauve   { background-color: var(--mauve); color: var(--bg); }
+    .bg-green   { background-color: var(--green); color: var(--bg); }
+    .bg-peach   { background-color: var(--peach); color: var(--bg); }
+    .bg-teal    { background-color: #74c7ec; color: var(--bg); }
+    .bg-yellow  { background-color: var(--yellow); color: var(--bg); }
+    .bg-red     { background-color: var(--red); color: var(--bg); }
+    .border-blue  { border-color: var(--blue); }
+    .border-mauve { border-color: var(--mauve); }
+    .border-green { border-color: var(--green); }
+    .text-blue  { color: var(--blue); }
+    .text-mauve { color: var(--mauve); }
+    .text-green { color: var(--green); }
+    .text-peach { color: var(--peach); }
+
+    /* Responsive diagram overrides */
+    @media (max-width: 768px) {
+      .skill-map {
+        grid-template-columns: 1fr;
+      }
+
+      .tdd-cycle {
+        gap: 4px;
+      }
+
+      .tdd-node {
+        width: 100px;
+        height: 64px;
+        font-size: 0.85rem;
+      }
+
+      .tdd-arrow {
+        width: 20px;
+      }
+
+      .flow-fan .flow-node {
+        min-width: 90px;
+        font-size: 0.8rem;
+        padding: 8px 12px;
+      }
+
+      .diagram {
+        padding: 20px 16px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .tdd-cycle {
+        flex-direction: column;
+      }
+
+      .tdd-arrow {
+        width: 2px;
+        height: 20px;
+      }
+
+      .tdd-arrow::after {
+        right: auto;
+        top: auto;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 6px solid var(--subtext);
+        border-bottom: none;
+      }
+
+      .flow-row {
+        flex-direction: column;
+        gap: 8px;
+      }
+
+      .flow-arrow-right {
+        width: 2px;
+        height: 20px;
+      }
+
+      .flow-arrow-right::after {
+        right: auto;
+        top: auto;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        border-top: 6px solid var(--subtext);
+        border-bottom: none;
+      }
     }
 
     /* ===== Images ===== */
@@ -635,34 +994,7 @@
     </div>
   </footer>
 
-  <!-- Mermaid Diagrams -->
-  <script type="module">
-    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
-    mermaid.initialize({
-      startOnLoad: false,
-      theme: 'dark',
-      themeVariables: {
-        darkMode: true,
-        background: '#1e1e2e',
-        primaryColor: '#89b4fa',
-        primaryTextColor: '#cdd6f4',
-        primaryBorderColor: '#74c7ec',
-        lineColor: '#a6adc8',
-        secondaryColor: '#f5c2e7',
-        tertiaryColor: '#313244'
-      }
-    });
-    // Jekyll renders ```mermaid as <pre><code class="language-mermaid">
-    // Transform them into <pre class="mermaid"> for Mermaid to find
-    document.querySelectorAll('pre > code.language-mermaid').forEach(function(codeEl) {
-      var pre = codeEl.parentElement;
-      var newPre = document.createElement('pre');
-      newPre.className = 'mermaid';
-      newPre.textContent = codeEl.textContent;
-      pre.parentElement.replaceChild(newPre, pre);
-    });
-    await mermaid.run();
-  </script>
+  <!-- No external JS dependencies - all diagrams are pure HTML/CSS -->
 
   <!-- Mobile Navigation Toggle -->
   <script>

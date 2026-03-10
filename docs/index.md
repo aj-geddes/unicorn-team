@@ -52,34 +52,26 @@ That's it. Skills are discovered automatically. Hooks are wired. The orchestrato
 
 The orchestrator analyzes every task and routes it to the right specialist. Each agent gets a fresh 200K context window, so you never run out of room.
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#89b4fa', 'primaryTextColor': '#cdd6f4', 'primaryBorderColor': '#74c7ec', 'lineColor': '#a6adc8', 'secondaryColor': '#f5c2e7', 'tertiaryColor': '#1e1e2e', 'background': '#1e1e2e', 'mainBkg': '#313244', 'nodeBorder': '#74c7ec', 'clusterBkg': '#181825', 'titleColor': '#cdd6f4', 'edgeLabelBackground': '#313244'}}}%%
-flowchart TD
-    U["You"] --> O["Orchestrator"]
-    O --> A["Architect"]
-    O --> D["Developer"]
-    O --> Q["QA / Security"]
-    O --> DV["DevOps"]
-    O --> P["Polyglot"]
-
-    A --> QG["Quality Gates"]
-    D --> QG
-    Q --> QG
-    DV --> QG
-    P --> QG
-
-    QG --> R["Result"]
-
-    style U fill:#f5c2e7,stroke:#f5c2e7,color:#1e1e2e
-    style O fill:#89b4fa,stroke:#89b4fa,color:#1e1e2e
-    style A fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-    style D fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-    style Q fill:#fab387,stroke:#fab387,color:#1e1e2e
-    style DV fill:#74c7ec,stroke:#74c7ec,color:#1e1e2e
-    style P fill:#f9e2af,stroke:#f9e2af,color:#1e1e2e
-    style QG fill:#f38ba8,stroke:#f38ba8,color:#1e1e2e
-    style R fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-```
+<div class="diagram">
+  <div class="flow">
+    <div class="flow-node bg-pink">You</div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node bg-blue">Orchestrator</div>
+    <div class="flow-arrow"></div>
+    <div class="flow-fan">
+      <div class="flow-node bg-mauve">Architect</div>
+      <div class="flow-node bg-green">Developer</div>
+      <div class="flow-node bg-peach">QA / Security</div>
+      <div class="flow-node bg-teal">DevOps</div>
+      <div class="flow-node bg-yellow">Polyglot</div>
+    </div>
+    <div class="flow-converge"></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node bg-red">Quality Gates</div>
+    <div class="flow-arrow"></div>
+    <div class="flow-node bg-green">Result</div>
+  </div>
+</div>
 
 ---
 
@@ -130,19 +122,18 @@ Language-specific idioms, tooling, and patterns that agents draw on during execu
 
 Every implementation follows a strict test-driven cycle. The developer agent will not write production code without a failing test first.
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#89b4fa', 'primaryTextColor': '#cdd6f4', 'primaryBorderColor': '#74c7ec', 'lineColor': '#a6adc8', 'secondaryColor': '#f5c2e7', 'tertiaryColor': '#1e1e2e', 'background': '#1e1e2e', 'mainBkg': '#313244', 'nodeBorder': '#74c7ec', 'clusterBkg': '#181825', 'titleColor': '#cdd6f4', 'edgeLabelBackground': '#313244'}}}%%
-graph LR
-    R["RED<br/>Write Failing Test"] --> G["GREEN<br/>Make It Pass"]
-    G --> RF["REFACTOR<br/>Improve Code"]
-    RF --> V["VERIFY<br/>Self-Review"]
-    V --> R
-
-    style R fill:#f38ba8,stroke:#f38ba8,color:#1e1e2e
-    style G fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-    style RF fill:#89b4fa,stroke:#89b4fa,color:#1e1e2e
-    style V fill:#f9e2af,stroke:#f9e2af,color:#1e1e2e
-```
+<div class="diagram">
+  <div class="tdd-cycle">
+    <div class="tdd-node bg-red">RED<small>Write Failing Test</small></div>
+    <div class="tdd-arrow"></div>
+    <div class="tdd-node bg-green">GREEN<small>Make It Pass</small></div>
+    <div class="tdd-arrow"></div>
+    <div class="tdd-node bg-blue">REFACTOR<small>Improve Code</small></div>
+    <div class="tdd-arrow"></div>
+    <div class="tdd-node bg-yellow">VERIFY<small>Self-Review</small></div>
+  </div>
+  <div class="tdd-loop-back"><div class="tdd-loop-line"></div></div>
+</div>
 
 No exceptions. No shortcuts. Tests define the contract before code fills it.
 

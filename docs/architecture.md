@@ -25,29 +25,19 @@ The 10X Developer Unicorn uses an **orchestrator-first design**: a lightweight c
 
 ## The Agent Squad
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#89b4fa', 'primaryTextColor': '#cdd6f4', 'primaryBorderColor': '#74c7ec', 'lineColor': '#a6adc8', 'secondaryColor': '#f5c2e7', 'tertiaryColor': '#1e1e2e', 'background': '#1e1e2e', 'mainBkg': '#313244', 'nodeBorder': '#74c7ec', 'clusterBkg': '#181825', 'titleColor': '#cdd6f4', 'edgeLabelBackground': '#313244'}}}%%
-graph TB
-    O["Orchestrator<br/><i>Coordination + Routing</i>"]
-
-    O --> AR["Architect<br/><i>System Design</i>"]
-    O --> DEV["Developer<br/><i>TDD Implementation</i>"]
-    O --> QA["QA-Security<br/><i>Review + Audit</i>"]
-    O --> DV["DevOps<br/><i>Deploy + Monitor</i>"]
-    O --> PO["Polyglot<br/><i>Language Expert</i>"]
-
-    AR -.->|"design docs"| DEV
-    DEV -.->|"code for review"| QA
-    QA -.->|"approved code"| DV
-    PO -.->|"language reference"| DEV
-
-    style O fill:#89b4fa,stroke:#89b4fa,color:#1e1e2e
-    style AR fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-    style DEV fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-    style QA fill:#fab387,stroke:#fab387,color:#1e1e2e
-    style DV fill:#74c7ec,stroke:#74c7ec,color:#1e1e2e
-    style PO fill:#f9e2af,stroke:#f9e2af,color:#1e1e2e
-```
+<div class="diagram">
+  <div class="flow">
+    <div class="flow-node bg-blue">Orchestrator<small>Coordination + Routing</small></div>
+    <div class="flow-arrow"></div>
+    <div class="flow-fan">
+      <div class="flow-node bg-mauve">Architect<small>System Design</small></div>
+      <div class="flow-node bg-green">Developer<small>TDD Implementation</small></div>
+      <div class="flow-node bg-peach">QA-Security<small>Review + Audit</small></div>
+      <div class="flow-node bg-teal">DevOps<small>Deploy + Monitor</small></div>
+      <div class="flow-node bg-yellow">Polyglot<small>Language Expert</small></div>
+    </div>
+  </div>
+</div>
 
 | Agent | Role | Key Outputs |
 |-------|------|-------------|
@@ -64,38 +54,54 @@ graph TB
 
 A complex feature request flows through multiple agents with quality gates at each transition.
 
-```mermaid
-%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#89b4fa', 'primaryTextColor': '#cdd6f4', 'primaryBorderColor': '#74c7ec', 'lineColor': '#a6adc8', 'secondaryColor': '#f5c2e7', 'tertiaryColor': '#1e1e2e', 'background': '#1e1e2e', 'mainBkg': '#313244', 'nodeBorder': '#74c7ec', 'clusterBkg': '#181825', 'titleColor': '#cdd6f4', 'edgeLabelBackground': '#313244'}}}%%
-sequenceDiagram
-    participant U as You
-    participant O as Orchestrator
-    participant AR as Architect
-    participant D as Developer
-    participant QA as QA-Security
-
-    U->>O: "Build user authentication"
-    O->>O: Analyze complexity
-    O->>AR: Design auth system
-    AR-->>O: ADR + API contract + data model
-
-    rect rgba(166, 227, 161, 0.1)
-        Note over O,D: Quality Gate: Design reviewed
-        O->>D: Implement (with Architect guidance)
-        D->>D: RED: write failing tests
-        D->>D: GREEN: implement auth
-        D->>D: REFACTOR: clean up
-        D->>D: VERIFY: self-review
-        D-->>O: Code + tests + coverage report
-    end
-
-    rect rgba(250, 179, 135, 0.1)
-        Note over O,QA: Quality Gate: Tests pass, coverage >= 80%
-        O->>QA: Review code + security audit
-        QA-->>O: Approved with findings
-    end
-
-    O-->>U: Complete implementation + review report
-```
+<div class="diagram">
+  <div class="sequence">
+    <div class="seq-step">
+      <div class="seq-dot bg-pink"></div>
+      <div class="seq-content">
+        <div class="seq-label" style="color: #f5c2e7;">You &rarr; Orchestrator</div>
+        <div class="seq-detail">"Build user authentication"</div>
+      </div>
+    </div>
+    <div class="seq-step">
+      <div class="seq-dot bg-blue"></div>
+      <div class="seq-content">
+        <div class="seq-label text-blue">Orchestrator &rarr; Architect</div>
+        <div class="seq-detail">Analyze complexity, delegate design</div>
+      </div>
+    </div>
+    <div class="seq-step">
+      <div class="seq-dot bg-mauve"></div>
+      <div class="seq-content">
+        <div class="seq-label text-mauve">Architect &rarr; Orchestrator</div>
+        <div class="seq-detail">Returns ADR + API contract + data model</div>
+      </div>
+    </div>
+    <div class="seq-gate">Quality Gate: Design reviewed</div>
+    <div class="seq-step">
+      <div class="seq-dot bg-green"></div>
+      <div class="seq-content">
+        <div class="seq-label text-green">Developer implements (TDD)</div>
+        <div class="seq-detail">RED: write failing tests &rarr; GREEN: implement auth &rarr; REFACTOR: clean up &rarr; VERIFY: self-review</div>
+      </div>
+    </div>
+    <div class="seq-gate">Quality Gate: Tests pass, coverage &ge; 80%</div>
+    <div class="seq-step">
+      <div class="seq-dot bg-peach"></div>
+      <div class="seq-content">
+        <div class="seq-label text-peach">QA-Security reviews</div>
+        <div class="seq-detail">Code review + security audit &rarr; Approved with findings</div>
+      </div>
+    </div>
+    <div class="seq-step">
+      <div class="seq-dot bg-pink"></div>
+      <div class="seq-content">
+        <div class="seq-label" style="color: #f5c2e7;">Orchestrator &rarr; You</div>
+        <div class="seq-detail">Complete implementation + review report</div>
+      </div>
+    </div>
+  </div>
+</div>
 
 ---
 
