@@ -1,0 +1,18 @@
+{
+  "name": "unicorn-team",
+  "owner": {
+    "name": "AJ Geddes",
+    "url": "https://github.com/aj-geddes"
+  },
+  "metadata": {
+    "description": "Agent orchestration system with 18 skills across 6 agents encoding the hidden 80% of software engineering expertise.",
+    "version": "1.0.0"
+  },
+  "plugins": [
+    {
+      "name": "unicorn-team",
+      "source": ".",
+      "description": "Agent orchestration system with 18 skills across 6 agents encoding the hidden 80% of software engineering expertise."
+    }
+  ]
+}

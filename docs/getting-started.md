@@ -9,10 +9,14 @@ permalink: /getting-started/
 
 ## Install
 
-One command. No configuration files to edit, no manual setup.
+Two commands. No configuration files to edit, no manual setup.
 
 ```bash
-claude plugin install aj-geddes/unicorn-team
+# Add the marketplace
+claude plugin marketplace add aj-geddes/unicorn-team
+
+# Install the plugin
+claude plugin install unicorn-team@unicorn-team
 ```
 
 ### What Happens After Install

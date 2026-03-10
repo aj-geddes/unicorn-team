@@ -18,7 +18,9 @@ routing table, delegation templates, quality gates, and response format.
 ## Quick Start
 
 ```bash
-claude plugin install aj-geddes/unicorn-team
+# Add the marketplace and install
+claude plugin marketplace add aj-geddes/unicorn-team
+claude plugin install unicorn-team@unicorn-team
 ```
 
 For development:

@@ -16,7 +16,11 @@ This plugin encodes those skills into a coordinated agent team that Claude Code 
 ## Install
 
 ```bash
-claude plugin install aj-geddes/unicorn-team
+# Add the marketplace
+claude plugin marketplace add aj-geddes/unicorn-team
+
+# Install the plugin
+claude plugin install unicorn-team@unicorn-team
 ```
 
 Done. Claude Code discovers all 18 skills, registers event hooks, and activates the orchestrator.
@@ -119,7 +123,9 @@ Plus **hvs-skill-buddy** for skill library auditing and creation.
 
 ```
 unicorn-team/
-├── .claude-plugin/plugin.json        # Plugin manifest
+├── .claude-plugin/
+│   ├── plugin.json                   # Plugin manifest
+│   └── marketplace.json              # Marketplace manifest
 ├── settings.json                     # Plugin settings
 ├── CLAUDE.md                         # Orchestrator activation
 ├── skills/                           # 18 skills, flat layout
