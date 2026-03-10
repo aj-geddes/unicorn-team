@@ -1,373 +1,178 @@
 # 10X Developer Unicorn
 
-> An agent orchestration system for Claude Code that encodes the "hidden 80%" of software engineering expertise into 18 skills and 6 specialized agents.
+> A Claude Code plugin that encodes the "hidden 80%" of software engineering expertise into 18 skills across 6 specialized agents.
 
-[![Tests](https://img.shields.io/badge/tests-84%20passed-brightgreen.svg)]()
+[![Tests](https://img.shields.io/badge/tests-94%20passed-brightgreen.svg)]()
 [![Skills](https://img.shields.io/badge/skills-18-blue.svg)]()
-[![Claude Code](https://img.shields.io/badge/Claude-Code-blueviolet.svg)](https://claude.ai)
+[![Plugin](https://img.shields.io/badge/Claude%20Code-plugin-blueviolet.svg)](https://claude.ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
-## What is This?
+## What Is This?
 
-Most AI coding assistants focus on the visible 20% — writing code, answering syntax questions, generating boilerplate. Real 10X developers spend 80% of their time on skills that are rarely taught: reading code strategically, recognizing cross-domain patterns, estimating with risk awareness, self-reviewing before anyone sees the code, and managing technical debt deliberately.
+Most AI coding tools help with the visible 20% -- writing code, answering syntax questions, generating boilerplate. But experienced developers spend 80% of their effort on skills that are rarely taught: reading code strategically, recognizing cross-domain patterns, estimating with risk awareness, self-reviewing before anyone sees the code, and managing technical debt deliberately.
 
-This system encodes those skills into a coordinated team of specialized agents that Claude Code can use automatically.
+This plugin encodes those skills into a coordinated agent team that Claude Code uses automatically.
 
-## Quick Start
+## Install
 
 ```bash
 claude plugin install aj-geddes/unicorn-team
 ```
 
-That's it. The plugin system handles skill discovery, namespacing, and hook registration automatically.
+Done. Claude Code discovers all 18 skills, registers event hooks, and activates the orchestrator.
 
-### Development Setup
+## How It Works
 
-```bash
-git clone https://github.com/aj-geddes/unicorn-team.git
-cd unicorn-team
-pytest tests/ -v              # Verify everything passes
-./scripts/validate.sh         # Validate plugin structure
-```
-
-### Prerequisites
-
-- Python 3.10+ (for tests)
-- Git
-- [Claude Code](https://docs.anthropic.com/en/docs/claude-code)
-
-## Architecture
+You make a request. The orchestrator analyzes it, routes to the right agent, and enforces quality gates on the result.
 
 ```mermaid
 flowchart TB
     User([User Request])
 
     subgraph Orchestrator["ORCHESTRATOR"]
-        O["Route & Coordinate\nDelegate, don't implement\nEnforce quality gates"]
+        O["Analyze complexity\nSelect agent(s)\nEnforce quality gates"]
     end
 
     subgraph Agents["AGENT TEAM"]
         direction LR
-        AR["Architect\n─────────\nDesign, ADRs\nAPI contracts"]
-        DV["Developer\n─────────\nTDD implementation\nPython, JS, Go, Rust"]
-        QA["QA-Security\n─────────\nCode review\nSTRIDE threats"]
-        DO["DevOps\n─────────\nCI/CD, Docker\nKubernetes"]
-        PG["Polyglot\n─────────\nNew languages\nPattern transfer"]
+        AR["Architect\nDesign + ADRs"]
+        DV["Developer\nTDD impl"]
+        QA["QA-Security\nReview + STRIDE"]
+        DO["DevOps\nCI/CD + infra"]
+        PG["Polyglot\nNew languages"]
     end
 
     subgraph Skills["SKILLS LIBRARY"]
         direction LR
-        META["Meta Skills\n──────────\nCode Reading\nPattern Transfer\nEstimation\nSelf-Verification\nTechnical Debt\nLanguage Learning"]
-        DOMAIN["Domain Skills\n──────────\nPython\nJavaScript\nTesting\nSecurity\nDevOps"]
+        META["Meta Skills\nCode Reading | Patterns\nEstimation | Self-Review\nTech Debt | Learning"]
+        DOMAIN["Domain Skills\nPython | JavaScript\nTesting | Security\nDevOps"]
     end
+
+    QG{{"Quality Gates\ntests pass · coverage ≥ 80%\nself-review complete"}}
 
     User --> O
     O --> AR & DV & QA & DO & PG
-    AR -.-> META
-    DV -.-> META & DOMAIN
-    QA -.-> DOMAIN
-    DO -.-> DOMAIN
-    PG -.-> META
+    AR & DV & QA & DO & PG -.-> META & DOMAIN
+    AR & DV & QA & DO & PG --> QG
+    QG --> Result([Result + Proof])
+
+    style Orchestrator fill:#313244,stroke:#cba6f7,stroke-width:2px,color:#ffffff
+    style Agents fill:#313244,stroke:#fab387,stroke-width:2px,color:#ffffff
+    style Skills fill:#313244,stroke:#89b4fa,stroke-width:2px,color:#ffffff
+    style QG fill:#45475a,stroke:#a6e3a1,stroke-width:2px,color:#ffffff
 ```
 
-### How Delegation Works
-
-Every substantial task goes through the orchestrator, which routes to the right agent with clear context, constraints, and expected output. Agents return structured results with quality proof.
+Every implementation follows strict TDD:
 
 ```mermaid
-sequenceDiagram
-    participant U as User
-    participant O as Orchestrator
-    participant A as Agent(s)
+flowchart LR
+    R["RED\nWrite failing test"]
+    G["GREEN\nMinimum code to pass"]
+    F["REFACTOR\nImprove, tests still green"]
+    V["VERIFY\nSelf-review + coverage"]
 
-    U->>O: "Add JWT authentication"
-    Note over O: Analyze complexity<br/>Select agent(s)<br/>Prepare delegation
+    R --> G --> F --> V -->|Next feature| R
 
-    O->>A: Task + Context + Constraints
-    Note over A: Execute with TDD<br/>RED → GREEN → REFACTOR<br/>Self-review
-
-    A->>O: Result + Tests + Coverage proof
-    Note over O: Verify quality gates<br/>All tests pass?<br/>Coverage ≥ 80%?
-
-    O->>U: Summary + Deliverables + Quality proof
+    style R fill:#f38ba8,stroke:#f38ba8,color:#1e1e2e
+    style G fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
+    style F fill:#89b4fa,stroke:#89b4fa,color:#1e1e2e
+    style V fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
 ```
 
-### Routing
+## The 18 Skills
 
-```
-Simple question        → Answer directly (no agent needed)
-Code implementation    → Developer (with TDD)
-Architecture decision  → Architect (ADR + diagrams)
-Code review            → QA-Security (4-layer review)
-Deployment / infra     → DevOps (pipelines + manifests)
-New language           → Polyglot → Developer
-Complex multi-domain   → Parallel delegation → Aggregate
-```
+### Agents
 
-## Skills
+| Skill | What It Does |
+|-------|-------------|
+| **orchestrator** | Routes tasks, delegates to agents, enforces quality gates |
+| **architect** | System design, ADRs, API contracts, tradeoff analysis |
+| **developer** | TDD-first implementation across Python, JS/TS, Go, Rust |
+| **qa-security** | 4-layer code review, STRIDE threat modeling |
+| **agent-devops** | CI/CD pipelines, deployment strategies, runbooks |
+| **polyglot** | Rapid language acquisition, cross-ecosystem pattern transfer |
 
-### Agents (6)
+### Meta Skills -- The Hidden 80%
 
-Each agent is a skill with its own `SKILL.md`, `references/`, and optional `scripts/`.
+| Skill | What It Does |
+|-------|-------------|
+| **self-verification** | Systematic pre-commit quality checks (6-step protocol) |
+| **code-reading** | Strategic codebase comprehension -- entry points, data flow, error paths |
+| **pattern-transfer** | Recognize problem classes, transfer proven solutions across domains |
+| **estimation** | Risk-aware PERT estimation with decomposition and confidence levels |
+| **technical-debt** | Track, classify, and deliberately manage shortcuts and debt |
+| **language-learning** | 5-phase protocol: zero to productive in a new language |
 
-| Agent | Purpose | Key Outputs |
-|-------|---------|-------------|
-| **Orchestrator** | Routes tasks, enforces quality gates, manages context | Delegation plans, quality reports |
-| **Architect** | System design, API contracts, tradeoff analysis | ADRs, Mermaid diagrams, API specs |
-| **Developer** | TDD implementation across languages | Code + tests (always RED → GREEN → REFACTOR) |
-| **QA-Security** | Code review, STRIDE threat modeling | Pass/fail reports with specific findings |
-| **DevOps** | CI/CD, containers, infrastructure, observability | Pipelines, K8s manifests, runbooks |
-| **Polyglot** | Rapid language acquisition, pattern transfer | Quick reference cards, idiomatic patterns |
-
-### Meta Skills (6)
-
-The "hidden 80%" — skills that separate experienced engineers from beginners.
-
-| Skill | What It Does | Trigger Phrases |
-|-------|-------------|-----------------|
-| **Self-Verification** | Quality checks before every commit | "review", "check my code", "before commit" |
-| **Code Reading** | Strategic code comprehension (not linear reading) | "understand this", "how does this work", "read this codebase" |
-| **Pattern Transfer** | Recognize and apply patterns across domains | "I've seen this before", "like X but in Y", "equivalent of" |
-| **Estimation** | Risk-aware PERT estimation with decomposition | "how long", "estimate", "when will this be done" |
-| **Technical Debt** | Track, classify, and manage debt deliberately | "tech debt", "shortcuts", "cleanup", "refactor" |
-| **Language Learning** | 5-phase protocol: zero to productive in < 4 hours | "learn Rust", "new language", "getting started with" |
-
-### Domain Skills (5)
-
-Language and platform expertise with project-specific conventions.
+### Domain Skills
 
 | Skill | Coverage |
 |-------|----------|
-| **Python** | Type hints (3.10+), pytest, async, ruff, mypy, poetry |
-| **JavaScript** | TypeScript, React patterns, Node.js, Vitest, ESLint |
-| **Testing** | TDD protocol, mocking strategies, coverage, cross-language patterns |
-| **Security** | OWASP Top 10, STRIDE, input validation, secrets management |
-| **DevOps** | Docker, Kubernetes, GitHub Actions, observability stack |
+| **python** | Type hints (3.10+), pytest, async, ruff, mypy, poetry |
+| **javascript** | TypeScript, React, Node.js, Vitest, ESLint |
+| **testing** | TDD protocol, mocking strategies, coverage, cross-language patterns |
+| **security** | OWASP Top 10, STRIDE, input validation, secrets management |
+| **domain-devops** | Docker, Kubernetes, GitHub Actions, observability stack |
 
-### Skills Matrix
-
-```mermaid
-flowchart TB
-    subgraph root["UNICORN TEAM — 18 SKILLS"]
-        direction TB
-        subgraph agents["AGENTS"]
-            A1["Orchestrator"]
-            A2["Architect"]
-            A3["Developer"]
-            A4["QA-Security"]
-            A5["DevOps"]
-            A6["Polyglot"]
-        end
-        subgraph meta["META SKILLS"]
-            M1["Self-Verification"]
-            M2["Code Reading"]
-            M3["Pattern Transfer"]
-            M4["Estimation"]
-            M5["Technical Debt"]
-            M6["Language Learning"]
-        end
-        subgraph domain["DOMAIN SKILLS"]
-            D1["Python"]
-            D2["JavaScript"]
-            D3["Testing"]
-            D4["Security"]
-            D5["DevOps"]
-        end
-    end
-
-    style root fill:#1e1e2e,stroke:#cba6f7,stroke-width:2px,color:#ffffff
-    style agents fill:#313244,stroke:#fab387,stroke-width:2px,color:#ffffff
-    style meta fill:#313244,stroke:#89b4fa,stroke-width:2px,color:#ffffff
-    style domain fill:#313244,stroke:#a6e3a1,stroke-width:2px,color:#ffffff
-
-    style A1 fill:#45475a,stroke:#fab387,color:#ffffff
-    style A2 fill:#45475a,stroke:#fab387,color:#ffffff
-    style A3 fill:#45475a,stroke:#fab387,color:#ffffff
-    style A4 fill:#45475a,stroke:#fab387,color:#ffffff
-    style A5 fill:#45475a,stroke:#fab387,color:#ffffff
-    style A6 fill:#45475a,stroke:#fab387,color:#ffffff
-
-    style M1 fill:#45475a,stroke:#89b4fa,color:#ffffff
-    style M2 fill:#45475a,stroke:#89b4fa,color:#ffffff
-    style M3 fill:#45475a,stroke:#89b4fa,color:#ffffff
-    style M4 fill:#45475a,stroke:#89b4fa,color:#ffffff
-    style M5 fill:#45475a,stroke:#89b4fa,color:#ffffff
-    style M6 fill:#45475a,stroke:#89b4fa,color:#ffffff
-
-    style D1 fill:#45475a,stroke:#a6e3a1,color:#ffffff
-    style D2 fill:#45475a,stroke:#a6e3a1,color:#ffffff
-    style D3 fill:#45475a,stroke:#a6e3a1,color:#ffffff
-    style D4 fill:#45475a,stroke:#a6e3a1,color:#ffffff
-    style D5 fill:#45475a,stroke:#a6e3a1,color:#ffffff
-```
-
-## TDD Workflow
-
-Every implementation follows strict Test-Driven Development. No exceptions.
-
-```mermaid
-flowchart LR
-    subgraph RED["RED"]
-        R["Write Failing Test\nTest MUST fail"]
-    end
-
-    subgraph GREEN["GREEN"]
-        G["Minimum Code\nTest MUST pass"]
-    end
-
-    subgraph REFACTOR["REFACTOR"]
-        F["Improve Code\nTests still pass"]
-    end
-
-    subgraph VERIFY["VERIFY"]
-        V["Self-Review\nCoverage >= 80%"]
-    end
-
-    R --> G --> F --> V -->|Next Feature| R
-
-    style RED fill:#f38ba8,stroke:#f38ba8,color:#1e1e2e
-    style GREEN fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
-    style REFACTOR fill:#89b4fa,stroke:#89b4fa,color:#1e1e2e
-    style VERIFY fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
-```
-
-## Quality Gates
-
-Quality enforcement via Claude Code event hooks and skill-level quality gates.
-
-```mermaid
-flowchart LR
-    subgraph Commit["PRE-COMMIT"]
-        C1["Lint"] --> C2["Type Check"] --> C3["Tests + Coverage"] --> C4["Security Scan"] --> C5["No Debug Code"] --> C6["No Task Markers"]
-    end
-
-    subgraph Push["PRE-PUSH"]
-        P1["Full Test Suite"] --> P2["Coverage >= 80%"] --> P3["Clean Tree"] --> P4["Commit Format"] --> P5["Security Audit"]
-    end
-
-    C6 -->|git commit| P1
-    P5 -->|git push| Remote([Remote])
-
-    style Commit fill:#313244,stroke:#89b4fa,color:#ffffff
-    style Push fill:#313244,stroke:#fab387,color:#ffffff
-```
-
-| Check | Pre-Commit | Pre-Push |
-|-------|:----------:|:--------:|
-| Linting (ruff/eslint/clippy) | Yes | Yes |
-| Type checking (mypy/tsc) | Yes | Yes |
-| Tests with coverage | Yes | Yes |
-| Security scan (bandit/npm audit) | Yes | Yes |
-| No debug code | Yes | Yes |
-| No task markers | Yes | Yes |
-| Commit message format | | Yes |
-| Clean working tree | | Yes |
-
-Hooks auto-detect project type (Python, Node, Go, Rust) and run the appropriate toolchain.
-
-## Scripts
-
-Scripts are co-located with their owning skills.
-
-| Script | Location | Usage |
-|--------|----------|-------|
-| **validate.sh** | `scripts/validate.sh` | `./scripts/validate.sh` |
-| **tdd.sh** | `skills/developer/scripts/tdd.sh` | `skills/developer/scripts/tdd.sh <feature>` |
-| **self-review.sh** | `skills/self-verification/scripts/self-review.sh` | `skills/self-verification/scripts/self-review.sh` |
-| **estimate.sh** | `skills/estimation/scripts/estimate.sh` | `skills/estimation/scripts/estimate.sh` |
-| **new-language.sh** | `skills/language-learning/scripts/new-language.sh` | `skills/language-learning/scripts/new-language.sh <lang>` |
+Plus **hvs-skill-buddy** for skill library auditing and creation.
 
 ## Project Structure
 
 ```
 unicorn-team/
-├── .claude-plugin/
-│   └── plugin.json                        # Plugin manifest
-├── CLAUDE.md                              # Orchestrator activation + dev rules
-├── README.md
-├── settings.json                          # Plugin settings
-├── .gitignore
+├── .claude-plugin/plugin.json        # Plugin manifest
+├── settings.json                     # Plugin settings
+├── CLAUDE.md                         # Orchestrator activation
+├── skills/                           # 18 skills, flat layout
+│   ├── orchestrator/
+│   │   ├── SKILL.md
+│   │   └── references/
+│   ├── developer/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   └── scripts/tdd.sh
+│   ├── self-verification/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   └── scripts/self-review.sh
+│   ├── estimation/
+│   │   ├── SKILL.md
+│   │   ├── references/
+│   │   └── scripts/estimate.sh
+│   └── ... (14 more)
+├── hooks/hooks.json                  # Claude Code event hooks
 ├── scripts/
-│   ├── validate.sh                        # Plugin structure validator
-│   ├── git-pre-commit                     # Git hook (developer tooling)
-│   └── git-pre-push                       # Git hook (developer tooling)
-├── skills/                                # Flat: skills/<name>/SKILL.md
-│   ├── orchestrator/                      # The coordinator brain
-│   ├── developer/                         # TDD implementation
-│   ├── architect/                         # System design + ADRs
-│   ├── qa-security/                       # Code review + STRIDE
-│   ├── agent-devops/                      # CI/CD + infrastructure
-│   ├── polyglot/                          # Language acquisition
-│   ├── self-verification/                 # Pre-commit quality
-│   ├── code-reading/                      # Strategic comprehension
-│   ├── pattern-transfer/                  # Cross-domain patterns
-│   ├── estimation/                        # PERT estimation
-│   ├── technical-debt/                    # Debt management
-│   ├── language-learning/                 # 5-phase learning
-│   ├── python/                            # Python domain
-│   ├── javascript/                        # JS/TS domain
-│   ├── testing/                           # Testing domain
-│   ├── security/                          # Security domain
-│   ├── domain-devops/                     # DevOps domain
-│   └── hvs-skill-buddy/                   # Skill library auditor
-├── hooks/
-│   └── hooks.json                         # Claude Code event hooks
-├── tests/
-│   ├── test_plugin.py
-│   ├── test_skills_valid.py
-│   ├── test_scripts.py
-│   └── test_hooks.py
-└── docs/
-    ├── architecture.md
-    ├── hidden-skills.md
-    ├── implementation-guide.md
-    └── TROUBLESHOOTING.md
+│   ├── validate.sh                   # Plugin structure validator
+│   ├── git-pre-commit                # Git pre-commit hook
+│   └── git-pre-push                  # Git pre-push hook
+├── tests/                            # 94 tests
+└── docs/                             # Architecture, troubleshooting
 ```
 
-## The 10X Philosophy
+Each skill contains a `SKILL.md` (with YAML frontmatter for auto-discovery), optional `references/` for deep-dive content, and optional `scripts/` for automation.
 
-Most developers focus on the visible part of software engineering. This system encodes the invisible part.
+## Development
 
-```
-        ┌─────────────────────────────┐
-        │      VISIBLE (20%)          │
-        │   Writing code              │
-        │   Using frameworks          │
-        │   Syntax knowledge          │
-~~~~~~~~│~~~~~~~~~~~~~~~~~~~~~~~~~~~~~│~~~~~~~~
-        │      HIDDEN (80%)           │
-        │   Strategic code reading    │
-        │   Cross-domain patterns     │
-        │   Risk-aware estimation     │
-        │   Self-verification         │
-        │   Technical debt mgmt       │
-        │   Security mindset          │
-        │   Observability design      │
-        └─────────────────────────────┘
+```bash
+git clone https://github.com/aj-geddes/unicorn-team.git
+cd unicorn-team
+pytest tests/ -v            # Run all 94 tests
+./scripts/validate.sh       # Validate plugin structure
 ```
 
-```mermaid
-%%{init: {'theme': 'dark'}}%%
-pie showData
-    title Where 10X Developers Spend Their Time
-    "Reading Code" : 40
-    "Pattern Recognition" : 15
-    "Debugging" : 15
-    "Self-Review" : 10
-    "Writing Code" : 10
-    "Communication" : 5
-    "Estimation" : 5
-```
+### Adding a Skill
 
-## Contributing
-
-### Adding a New Skill
-
-1. Create `skills/<skill-name>/SKILL.md`
-2. Add YAML frontmatter with `name` and `description` (include trigger phrases)
-3. Keep body under 500 lines — extract detail to `references/`
-4. Co-locate scripts in `scripts/` within the skill directory
-5. Run `pytest tests/test_skills_valid.py -v`
+1. Create `skills/<name>/SKILL.md` with frontmatter:
+   ```yaml
+   ---
+   name: my-skill
+   description: >-
+     What it does. ALWAYS trigger on "phrase1", "phrase2".
+     Use when [condition]. Different from [sibling] which [difference].
+   ---
+   ```
+2. Keep body under 500 lines -- extract detail to `references/`
+3. Co-locate scripts in `scripts/` within the skill directory
+4. Run `pytest tests/ -v`
 
 ### Commit Convention
 
@@ -375,39 +180,27 @@ pie showData
 type(scope): description
 
 Types: feat, fix, docs, skill, script, test, refactor
-Scope: orchestrator, developer, qa, devops, hooks, etc.
-
-Examples:
-  feat(orchestrator): add parallel delegation support
-  skill(estimation): add PERT calculation reference
-  fix(pre-commit): handle missing ruff binary
 ```
 
-### Running Tests
+### Tests
 
 ```bash
-pytest tests/ -v                    # All tests
-pytest tests/test_plugin.py         # Plugin manifest validation
-pytest tests/test_skills_valid.py   # Skill validation only
-pytest tests/test_scripts.py        # Script validation only
-pytest tests/test_hooks.py          # Hook validation only
+pytest tests/test_plugin.py         # Plugin manifest
+pytest tests/test_skills_valid.py   # SKILL.md frontmatter + size
+pytest tests/test_scripts.py        # Script permissions + shebangs
+pytest tests/test_hooks.py          # hooks.json validation
 ```
 
 ## Stats
 
-- **18 skills** across 3 categories
-- **6 agents** with specialized roles
-- **58 reference documents** for deep-dive content
-- **6 automation scripts** (co-located with owning skills)
-- **1 Claude Code event hook** (PostToolUse reminder)
-- **94 tests** (all passing)
+| | Count |
+|-|-------|
+| Skills | 18 |
+| Agents | 6 |
+| Reference docs | 58 |
+| Scripts | 7 |
+| Tests | 94 |
 
 ## License
 
-MIT License — see [LICENSE](LICENSE) for details.
-
----
-
-<p align="center">
-  <i>Built with the 10X methodology using Claude Code</i>
-</p>
+MIT -- see [LICENSE](LICENSE).
