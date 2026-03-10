@@ -11,7 +11,7 @@
   "plugins": [
     {
       "name": "unicorn-team",
-      "source": ".",
+      "source": "./",
       "description": "Agent orchestration system with 18 skills across 6 agents encoding the hidden 80% of software engineering expertise."
     }
   ]
