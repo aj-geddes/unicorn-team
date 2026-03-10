@@ -144,7 +144,7 @@ def test_specific_behavior():
 
 ```bash
 git add src/my_file.py tests/test_my_file.py
-./skills/unicorn/self-verification/scripts/self-review.sh
+./skills/self-verification/scripts/self-review.sh
 ```
 
 ### Estimation script: invalid number input

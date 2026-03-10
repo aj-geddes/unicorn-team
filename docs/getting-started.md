@@ -66,7 +66,7 @@ The plugin includes automation scripts for common workflows.
 Interactive guided TDD cycle for any feature:
 
 ```bash
-./skills/agents/developer/scripts/tdd.sh my-feature
+./skills/developer/scripts/tdd.sh my-feature
 ```
 
 Walks you through RED (write failing test), GREEN (make it pass), REFACTOR (improve), with automated verification at each phase.
@@ -76,7 +76,7 @@ Walks you through RED (write failing test), GREEN (make it pass), REFACTOR (impr
 Pre-commit quality checklist:
 
 ```bash
-./skills/unicorn/self-verification/scripts/self-review.sh
+./skills/self-verification/scripts/self-review.sh
 ```
 
 Reviews your staged changes, runs the 6-step verification protocol, and asks for confirmation before proceeding. Catches issues before they reach code review.
@@ -86,7 +86,7 @@ Reviews your staged changes, runs the 6-step verification protocol, and asks for
 Interactive task estimation with risk analysis:
 
 ```bash
-./skills/unicorn/estimation/scripts/estimate.sh
+./skills/estimation/scripts/estimate.sh
 ```
 
 Guides you through task decomposition, three-point estimates (optimistic/realistic/pessimistic), PERT formula calculation, and risk buffer application.
@@ -96,7 +96,7 @@ Guides you through task decomposition, three-point estimates (optimistic/realist
 Structured protocol for picking up a new programming language:
 
 ```bash
-./skills/unicorn/language-learning/scripts/new-language.sh rust
+./skills/language-learning/scripts/new-language.sh rust
 ```
 
 Walks through the 5-phase acquisition protocol: exploration, patterns, ecosystem, idioms, production readiness.
