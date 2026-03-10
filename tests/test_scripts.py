@@ -113,10 +113,10 @@ def test_install_script_exists():
 
 # Co-located script existence tests
 SCRIPT_LOCATIONS = {
-    "tdd.sh": SKILLS_DIR / "agents" / "developer" / "scripts" / "tdd.sh",
-    "self-review.sh": SKILLS_DIR / "unicorn" / "self-verification" / "scripts" / "self-review.sh",
-    "estimate.sh": SKILLS_DIR / "unicorn" / "estimation" / "scripts" / "estimate.sh",
-    "new-language.sh": SKILLS_DIR / "unicorn" / "language-learning" / "scripts" / "new-language.sh",
+    "tdd.sh": SKILLS_DIR / "developer" / "scripts" / "tdd.sh",
+    "self-review.sh": SKILLS_DIR / "self-verification" / "scripts" / "self-review.sh",
+    "estimate.sh": SKILLS_DIR / "estimation" / "scripts" / "estimate.sh",
+    "new-language.sh": SKILLS_DIR / "language-learning" / "scripts" / "new-language.sh",
 }
 
 

@@ -172,7 +172,7 @@ Before finalizing any estimate:
 Run the interactive PERT estimation helper:
 
 ```bash
-./skills/unicorn/estimation/scripts/estimate.sh
+skills/estimation/scripts/estimate.sh
 # or
 ./scripts/estimate.sh [--output filename]
 ```

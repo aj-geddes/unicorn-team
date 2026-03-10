@@ -143,7 +143,7 @@ See `references/self-review-failures.md` for detailed prevention strategies.
 Run the interactive self-review protocol:
 
 ```bash
-./skills/unicorn/self-verification/scripts/self-review.sh
+skills/self-verification/scripts/self-review.sh
 # or
 ./scripts/self-review.sh && git commit -m "your message"
 ```

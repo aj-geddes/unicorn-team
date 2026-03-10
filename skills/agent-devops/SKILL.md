@@ -1,5 +1,5 @@
 ---
-name: devops
+name: agent-devops
 description: >-
   Guides the user through CI/CD pipelines, infrastructure-as-code, container
   orchestration, deployment strategies, and production observability. ALWAYS
@@ -11,7 +11,7 @@ description: >-
 model: sonnet
 tools: [Bash, Read, Write, Edit]
 skills:
-  - devops (domain)
+  - domain-devops
   - security (domain)
 ---
 

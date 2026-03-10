@@ -65,8 +65,8 @@ See: `references/debugging-protocols.md`
 
 | Language | Domain Skill | Test Runner | Coverage Command |
 |----------|-------------|-------------|-----------------|
-| Python | `skills/domain/python/` | `pytest -v` | `pytest --cov=. --cov-fail-under=80` |
-| JS/TS | `skills/domain/javascript/` | `npm test` / `vitest` | `npm test -- --coverage` |
+| Python | `python` | `pytest -v` | `pytest --cov=. --cov-fail-under=80` |
+| JS/TS | `javascript` | `npm test` / `vitest` | `npm test -- --coverage` |
 | Go | - | `go test -v ./...` | `go test -cover -coverprofile=coverage.out` |
 | Rust | - | `cargo test` | `cargo tarpaulin` |
 
@@ -125,10 +125,10 @@ Do NOT assume. Ask specific questions ("Return None or raise?"), propose options
 | Pre-commit check | `self-verification` |
 | Unfamiliar codebase | `code-reading` |
 | Porting patterns | `pattern-transfer` |
-| Python specifics | `skills/domain/python/` |
-| JS/TS specifics | `skills/domain/javascript/` |
-| Test patterns | `skills/domain/testing/` |
-| Security concerns | `skills/domain/security/` |
+| Python specifics | `python` |
+| JS/TS specifics | `javascript` |
+| Test patterns | `testing` |
+| Security concerns | `security` |
 
 ## References
 

@@ -12,20 +12,21 @@ subagents (Agent tool). Never implement complex tasks directly.
 - Apply quality gates before returning results
 - Each subagent gets fresh 200K context -- use it
 
-The orchestrator skill (`skills/agents/orchestrator/SKILL.md`) has the full
+The orchestrator skill (`skills/orchestrator/SKILL.md`) has the full
 routing table, delegation templates, quality gates, and response format.
 
 ## Quick Start
 
 ```bash
-./scripts/install.sh        # Symlinks skills into .claude/skills/, wires git hooks
-pytest tests/ -v            # Verify everything passes
+claude plugin install aj-geddes/unicorn-team
 ```
 
-Install options:
-- `--global` — copies skills to `~/.claude/skills/` + activates orchestrator in `~/.claude/CLAUDE.md`
-- `--force` — overwrites existing skills and hooks
-- `--uninstall` — removes `.claude/skills/` symlinks
+For development:
+```bash
+git clone https://github.com/aj-geddes/unicorn-team.git
+cd unicorn-team
+pytest tests/ -v            # Verify everything passes
+```
 
 ## Development Rules
 
@@ -77,12 +78,12 @@ Scope: orchestrator, developer, qa, devops, hooks, etc.
 ## Commands
 
 ```bash
-./scripts/install.sh                                          # Install system
-./skills/agents/developer/scripts/tdd.sh <feature>            # TDD workflow
-./skills/unicorn/self-verification/scripts/self-review.sh     # Pre-commit checklist
-./skills/unicorn/estimation/scripts/estimate.sh               # PERT estimation
-./skills/unicorn/language-learning/scripts/new-language.sh <lang>  # Language learning
+skills/developer/scripts/tdd.sh <feature>                     # TDD workflow
+skills/self-verification/scripts/self-review.sh               # Pre-commit checklist
+skills/estimation/scripts/estimate.sh                         # PERT estimation
+skills/language-learning/scripts/new-language.sh <lang>       # Language learning
 pytest tests/ -v                                              # Run all tests
+./scripts/validate.sh                                         # Validate plugin structure
 ```
 
 ## Delegation Routing

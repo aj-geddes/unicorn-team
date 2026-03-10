@@ -16,24 +16,19 @@ This system encodes those skills into a coordinated team of specialized agents t
 ## Quick Start
 
 ```bash
-git clone https://github.com/aj-geddes/unicorn-team.git
-cd unicorn-team
-./scripts/install.sh
+claude plugin install aj-geddes/unicorn-team
 ```
 
-That's it. The installer:
-- Symlinks all 18 skills into `.claude/skills/` so Claude Code auto-discovers them
-- Wires git hooks (pre-commit quality gate, pre-push validation)
-- Makes all co-located scripts executable
+That's it. The plugin system handles skill discovery, namespacing, and hook registration automatically.
 
-### Install Options
+### Development Setup
 
-| Flag | Effect |
-|------|--------|
-| *(default)* | Project-level install to `.claude/skills/` (symlinks) |
-| `--global` | User-wide install to `~/.claude/skills/` (copies) + orchestrator activation in `~/.claude/CLAUDE.md` |
-| `--force` | Overwrite existing skills and hooks |
-| `--uninstall` | Remove installed skills |
+```bash
+git clone https://github.com/aj-geddes/unicorn-team.git
+cd unicorn-team
+pytest tests/ -v              # Verify everything passes
+./scripts/validate.sh         # Validate plugin structure
+```
 
 ### Prerequisites
 
@@ -238,7 +233,7 @@ flowchart LR
 
 ## Quality Gates
 
-Two layers of automated quality enforcement via git hooks.
+Quality enforcement via Claude Code event hooks and skill-level quality gates.
 
 ```mermaid
 flowchart LR
@@ -276,70 +271,49 @@ Scripts are co-located with their owning skills.
 
 | Script | Location | Usage |
 |--------|----------|-------|
-| **install.sh** | `scripts/install.sh` | `./scripts/install.sh [--global] [--force]` |
-| **tdd.sh** | `skills/agents/developer/scripts/tdd.sh` | `./skills/agents/developer/scripts/tdd.sh <feature>` |
-| **self-review.sh** | `skills/unicorn/self-verification/scripts/self-review.sh` | `./skills/unicorn/self-verification/scripts/self-review.sh` |
-| **estimate.sh** | `skills/unicorn/estimation/scripts/estimate.sh` | `./skills/unicorn/estimation/scripts/estimate.sh` |
-| **new-language.sh** | `skills/unicorn/language-learning/scripts/new-language.sh` | `./skills/unicorn/language-learning/scripts/new-language.sh <lang>` |
+| **validate.sh** | `scripts/validate.sh` | `./scripts/validate.sh` |
+| **tdd.sh** | `skills/developer/scripts/tdd.sh` | `skills/developer/scripts/tdd.sh <feature>` |
+| **self-review.sh** | `skills/self-verification/scripts/self-review.sh` | `skills/self-verification/scripts/self-review.sh` |
+| **estimate.sh** | `skills/estimation/scripts/estimate.sh` | `skills/estimation/scripts/estimate.sh` |
+| **new-language.sh** | `skills/language-learning/scripts/new-language.sh` | `skills/language-learning/scripts/new-language.sh <lang>` |
 
 ## Project Structure
 
 ```
 unicorn-team/
+├── .claude-plugin/
+│   └── plugin.json                        # Plugin manifest
 ├── CLAUDE.md                              # Orchestrator activation + dev rules
 ├── README.md
+├── settings.json                          # Plugin settings
 ├── .gitignore
 ├── scripts/
-│   └── install.sh                         # One-command Claude Code installer
-├── skills/
-│   ├── agents/                            # Agent definitions (6)
-│   │   ├── orchestrator/                  # The coordinator brain
-│   │   │   ├── SKILL.md
-│   │   │   └── references/
-│   │   ├── developer/
-│   │   │   ├── SKILL.md
-│   │   │   ├── references/
-│   │   │   └── scripts/tdd.sh
-│   │   ├── architect/
-│   │   │   ├── SKILL.md
-│   │   │   └── references/
-│   │   ├── qa-security/
-│   │   │   ├── SKILL.md
-│   │   │   └── references/
-│   │   ├── devops/
-│   │   │   ├── SKILL.md
-│   │   │   └── references/
-│   │   └── polyglot/
-│   │       ├── SKILL.md
-│   │       ├── references/
-│   │       └── scripts/new-language.sh
-│   ├── unicorn/                           # Meta-skills (6)
-│   │   ├── self-verification/
-│   │   │   ├── SKILL.md
-│   │   │   ├── references/
-│   │   │   └── scripts/self-review.sh
-│   │   ├── code-reading/
-│   │   ├── pattern-transfer/
-│   │   ├── estimation/
-│   │   │   ├── SKILL.md
-│   │   │   ├── references/
-│   │   │   └── scripts/estimate.sh
-│   │   ├── technical-debt/
-│   │   └── language-learning/
-│   │       ├── SKILL.md
-│   │       ├── references/
-│   │       └── scripts/new-language.sh
-│   ├── domain/                            # Domain skills (5)
-│   │   ├── python/
-│   │   ├── javascript/
-│   │   ├── testing/
-│   │   ├── security/
-│   │   └── devops/
-│   └── hvs-skill-buddy/                  # Skill library auditor
+│   ├── validate.sh                        # Plugin structure validator
+│   ├── git-pre-commit                     # Git hook (developer tooling)
+│   └── git-pre-push                       # Git hook (developer tooling)
+├── skills/                                # Flat: skills/<name>/SKILL.md
+│   ├── orchestrator/                      # The coordinator brain
+│   ├── developer/                         # TDD implementation
+│   ├── architect/                         # System design + ADRs
+│   ├── qa-security/                       # Code review + STRIDE
+│   ├── agent-devops/                      # CI/CD + infrastructure
+│   ├── polyglot/                          # Language acquisition
+│   ├── self-verification/                 # Pre-commit quality
+│   ├── code-reading/                      # Strategic comprehension
+│   ├── pattern-transfer/                  # Cross-domain patterns
+│   ├── estimation/                        # PERT estimation
+│   ├── technical-debt/                    # Debt management
+│   ├── language-learning/                 # 5-phase learning
+│   ├── python/                            # Python domain
+│   ├── javascript/                        # JS/TS domain
+│   ├── testing/                           # Testing domain
+│   ├── security/                          # Security domain
+│   ├── domain-devops/                     # DevOps domain
+│   └── hvs-skill-buddy/                   # Skill library auditor
 ├── hooks/
-│   ├── pre-commit                         # Quality gate on commit
-│   └── pre-push                           # Full validation on push
+│   └── hooks.json                         # Claude Code event hooks
 ├── tests/
+│   ├── test_plugin.py
 │   ├── test_skills_valid.py
 │   ├── test_scripts.py
 │   └── test_hooks.py
@@ -389,7 +363,7 @@ pie showData
 
 ### Adding a New Skill
 
-1. Create `skills/<category>/<skill-name>/SKILL.md`
+1. Create `skills/<skill-name>/SKILL.md`
 2. Add YAML frontmatter with `name` and `description` (include trigger phrases)
 3. Keep body under 500 lines — extract detail to `references/`
 4. Co-locate scripts in `scripts/` within the skill directory
@@ -412,7 +386,8 @@ Examples:
 ### Running Tests
 
 ```bash
-pytest tests/ -v                    # All 84 tests
+pytest tests/ -v                    # All tests
+pytest tests/test_plugin.py         # Plugin manifest validation
 pytest tests/test_skills_valid.py   # Skill validation only
 pytest tests/test_scripts.py        # Script validation only
 pytest tests/test_hooks.py          # Hook validation only
@@ -424,8 +399,8 @@ pytest tests/test_hooks.py          # Hook validation only
 - **6 agents** with specialized roles
 - **58 reference documents** for deep-dive content
 - **6 automation scripts** (co-located with owning skills)
-- **2 git hooks** (pre-commit + pre-push)
-- **84 tests** (all passing)
+- **1 Claude Code event hook** (PostToolUse reminder)
+- **94 tests** (all passing)
 
 ## License
 

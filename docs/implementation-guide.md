@@ -2,40 +2,34 @@
 
 ## Quick Start
 
-### Step 1: Directory Structure
+### Step 1: Install the Plugin
 
 ```bash
-mkdir -p ~/.claude/{skills/unicorn,hooks,scripts}
+claude plugin install aj-geddes/unicorn-team
+```
 
-# Create the structure
-cat << 'STRUCTURE'
-~/.claude/
-├── CLAUDE.md                      # Lean orchestrator prompt
-├── skills/
-│   └── unicorn/
-│       ├── orchestrator/
-│       │   └── SKILL.md           # Task routing, delegation
-│       ├── code-reading/
-│       │   └── SKILL.md           # Codebase comprehension
-│       ├── pattern-transfer/
-│       │   └── SKILL.md           # Cross-domain patterns
-│       ├── self-verification/
-│       │   └── SKILL.md           # Pre-commit self-review
-│       ├── estimation/
-│       │   └── SKILL.md           # Task breakdown, risk
-│       ├── technical-debt/
-│       │   └── SKILL.md           # Debt tracking, paydown
-│       └── language-learning/
-│           └── SKILL.md           # Rapid paradigm acquisition
-├── hooks/
-│   ├── pre-commit                 # Quality gate hook
-│   └── pre-push                   # Final verification
-└── scripts/
-    ├── tdd.sh                     # TDD workflow
-    ├── self-review.sh             # Review checklist
-    ├── new-language.sh            # Language learning
-    └── estimate.sh                # Estimation helper
-STRUCTURE
+This installs the flat skill structure:
+
+```
+skills/
+├── orchestrator/              # Task routing, delegation
+├── developer/                 # Full-stack implementation
+├── architect/                 # System design
+├── qa-security/               # Code review, security
+├── code-reading/              # Codebase comprehension
+├── pattern-transfer/          # Cross-domain patterns
+├── self-verification/         # Pre-commit self-review
+├── estimation/                # Task breakdown, risk
+├── technical-debt/            # Debt tracking, paydown
+├── language-learning/         # Rapid paradigm acquisition
+├── polyglot/                  # Multi-language support
+├── python/                    # Python domain skill
+├── javascript/                # JavaScript domain skill
+├── testing/                   # Testing domain skill
+├── security/                  # Security domain skill
+├── domain-devops/             # DevOps domain skill
+├── agent-devops/              # DevOps agent skill
+└── hvs-skill-buddy/           # Skill authoring helper
 ```
 
 ### Step 2: Core Files
@@ -50,7 +44,7 @@ You are an orchestrating agent that delegates to specialized skills and subagent
 
 ## Core Principles
 - **TDD Always**: Tests define behavior before implementation
-- **Self-Review**: Check your own work before submission  
+- **Self-Review**: Check your own work before submission
 - **Pattern Recognition**: Find the underlying problem class
 - **Context Efficiency**: Delegate to preserve context budget
 
@@ -62,8 +56,7 @@ You are an orchestrating agent that delegates to specialized skills and subagent
 5. Before any commit: run self-verification
 
 ## Skills (load on demand)
-- `~/.claude/skills/unicorn/*/SKILL.md`
-- `~/.claude/skills/domain/*/SKILL.md` 
+- `skills/*/SKILL.md`
 
 ## Quality Gates
 - All tests pass
@@ -85,8 +78,8 @@ EOF
 #### Orchestrator Skill
 
 ```bash
-mkdir -p ~/.claude/skills/unicorn/orchestrator
-cat > ~/.claude/skills/unicorn/orchestrator/SKILL.md << 'EOF'
+mkdir -p skills/orchestrator
+cat > skills/orchestrator/SKILL.md << 'EOF'
 ---
 name: unicorn-orchestrator
 description: >
@@ -145,8 +138,8 @@ EOF
 #### Self-Verification Skill
 
 ```bash
-mkdir -p ~/.claude/skills/unicorn/self-verification
-cat > ~/.claude/skills/unicorn/self-verification/SKILL.md << 'EOF'
+mkdir -p skills/self-verification
+cat > skills/self-verification/SKILL.md << 'EOF'
 ---
 name: self-verification
 description: >
@@ -210,8 +203,8 @@ EOF
 #### Code Reading Skill
 
 ```bash
-mkdir -p ~/.claude/skills/unicorn/code-reading
-cat > ~/.claude/skills/unicorn/code-reading/SKILL.md << 'EOF'
+mkdir -p skills/code-reading
+cat > skills/code-reading/SKILL.md << 'EOF'
 ---
 name: code-reading
 description: >
@@ -279,8 +272,8 @@ EOF
 #### Pattern Transfer Skill
 
 ```bash
-mkdir -p ~/.claude/skills/unicorn/pattern-transfer
-cat > ~/.claude/skills/unicorn/pattern-transfer/SKILL.md << 'EOF'
+mkdir -p skills/pattern-transfer
+cat > skills/pattern-transfer/SKILL.md << 'EOF'
 ---
 name: pattern-transfer
 description: >
@@ -605,10 +598,10 @@ description: >
 model: opus
 tools: Bash, Read, Write, Edit, WebSearch
 skills:
-  - ~/.claude/skills/unicorn/self-verification
-  - ~/.claude/skills/unicorn/code-reading
-  - ~/.claude/skills/domain/python
-  - ~/.claude/skills/domain/testing
+  - self-verification
+  - code-reading
+  - python
+  - testing
 ---
 
 ## TDD Protocol

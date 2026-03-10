@@ -87,8 +87,8 @@ pip install -e .
 # Check if hook exists
 ls -la .git/hooks/pre-commit
 
-# If missing, run install script
-./scripts/install.sh
+# If missing, install the plugin (which wires hooks automatically)
+claude plugin install aj-geddes/unicorn-team
 
 # If exists but not executable
 chmod +x .git/hooks/pre-commit
@@ -583,7 +583,7 @@ rm -rf .10x-learning/python/
 ```bash
 $ ./scripts/new-language.sh rust
 Created learning directory
-# But skills/domain/rust/ is empty
+# But skills/rust/ is empty
 ```
 
 **Cause:** Template creation failed or was skipped.
@@ -594,8 +594,8 @@ Created learning directory
 ./scripts/new-language.sh rust 2>&1 | tee debug.log
 
 # Manually create template structure
-mkdir -p skills/domain/rust
-cat > skills/domain/rust/SKILL.md << 'EOF'
+mkdir -p skills/rust
+cat > skills/rust/SKILL.md << 'EOF'
 ---
 name: rust
 description: Rust language fundamentals, ownership, borrowing, and cargo
@@ -694,8 +694,8 @@ cp -r .git/hooks .git/hooks.backup
 cp hooks/pre-commit .git/hooks/pre-commit
 chmod +x .git/hooks/pre-commit
 
-# Or run full install
-./scripts/install.sh
+# Or reinstall the plugin (which rewires hooks)
+claude plugin install aj-geddes/unicorn-team
 ```
 
 **Check if hook is being called:**
@@ -794,7 +794,7 @@ If you encounter a bug not covered here:
 chmod +x scripts/*.sh
 
 # Hooks not running
-./scripts/install.sh
+claude plugin install aj-geddes/unicorn-team
 
 # Tests failing
 pytest -v  # See details
@@ -807,8 +807,11 @@ pytest --cov=. --cov-report=html
 # Debug any script
 bash -x ./scripts/script-name.sh
 
-# Reset everything
-./scripts/install.sh --force  # If supported
+# Validate plugin structure
+./scripts/validate.sh
+
+# Reinstall plugin
+claude plugin install aj-geddes/unicorn-team
 ```
 
 ### Emergency Bypass
@@ -834,7 +837,7 @@ git commit -m "test: add coverage for emergency commit"
 2. **Keep hooks updated:**
    ```bash
    git pull
-   ./scripts/install.sh
+   claude plugin install aj-geddes/unicorn-team
    ```
 
 3. **Test in isolation first:**

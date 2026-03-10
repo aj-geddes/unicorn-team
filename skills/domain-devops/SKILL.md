@@ -1,5 +1,5 @@
 ---
-name: devops
+name: domain-devops
 description: >-
   Guides the user through containerization, CI/CD pipelines, Kubernetes
   deployments, observability, and infrastructure management. ALWAYS trigger on
@@ -8,7 +8,7 @@ description: >-
   "pipeline", "container", "k8s", "GitOps", "Dockerfile", "health check",
   "troubleshoot deployment". Use when containerizing applications, building
   pipelines, deploying services, setting up monitoring, or debugging
-  infrastructure issues. Different from devops agent which handles orchestration
+  infrastructure issues. Different from agent-devops which handles orchestration
   and runbook execution rather than pattern guidance.
 ---
 
