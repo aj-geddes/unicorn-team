@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
+  {% seo %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "SoftwareApplication",
+    "name": "{{ site.title }}",
+    "description": "{{ site.description }}",
+    "url": "{{ site.url }}{{ site.baseurl }}/",
+    "applicationCategory": "DeveloperApplication",
+    "operatingSystem": "Cross-platform",
+    "author": {
+      "@type": "Person",
+      "name": "{{ site.author.name }}",
+      "url": "{{ site.author.url }}"
+    },
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "USD"
+    },
+    "softwareHelp": {
+      "@type": "WebPage",
+      "url": "{{ site.url }}{{ site.baseurl }}/getting-started/"
+    },
+    "codeRepository": "https://github.com/{{ site.repository }}"
+  }
+  </script>
+  <style>
+    /* ===== Reset & Base ===== */
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg: #1e1e2e;
+      --surface: #313244;
+      --overlay: #45475a;
+      --text: #cdd6f4;
+      --subtext: #a6adc8;
+      --mauve: #cba6f7;
+      --peach: #fab387;
+      --blue: #89b4fa;
+      --green: #a6e3a1;
+      --red: #f38ba8;
+      --yellow: #f9e2af;
+      --max-width: 800px;
+      --nav-height: 64px;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen,
+        Ubuntu, Cantarell, "Fira Sans", "Droid Sans", "Helvetica Neue", Arial,
+        sans-serif;
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.7;
+      font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    /* ===== Navigation ===== */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      background-color: rgba(30, 30, 46, 0.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--surface);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-inner {
+      width: 100%;
+      max-width: 1100px;
+      padding: 0 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .nav-brand {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--mauve);
+      text-decoration: none;
+      letter-spacing: -0.02em;
+      white-space: nowrap;
+    }
+
+    .nav-links {
+      display: flex;
+      list-style: none;
+      gap: 8px;
+    }
+
+    .nav-links a {
+      color: var(--subtext);
+      text-decoration: none;
+      font-size: 0.9rem;
+      font-weight: 500;
+      padding: 6px 14px;
+      border-radius: 6px;
+      transition: color 0.2s, background-color 0.2s;
+    }
+
+    .nav-links a:hover {
+      color: var(--text);
+      background-color: var(--surface);
+    }
+
+    .nav-links a.active {
+      color: var(--mauve);
+      background-color: rgba(203, 166, 247, 0.1);
+    }
+
+    .nav-toggle {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      color: var(--text);
+    }
+
+    .nav-toggle svg {
+      width: 24px;
+      height: 24px;
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    /* ===== Hero ===== */
+    .hero {
+      padding: 140px 24px 80px;
+      text-align: center;
+      max-width: 860px;
+      margin: 0 auto;
+    }
+
+    .hero h1 {
+      font-size: 3rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.15;
+      margin-bottom: 20px;
+      background: linear-gradient(135deg, var(--mauve), var(--blue));
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero .tagline {
+      font-size: 1.25rem;
+      color: var(--subtext);
+      max-width: 640px;
+      margin: 0 auto 40px;
+      line-height: 1.6;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 16px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 28px;
+      border-radius: 8px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-decoration: none;
+      transition: transform 0.15s, box-shadow 0.15s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, var(--mauve), #b490e0);
+      color: var(--bg);
+    }
+
+    .btn-secondary {
+      background-color: var(--surface);
+      color: var(--text);
+      border: 1px solid var(--overlay);
+    }
+
+    .hero-stats {
+      display: flex;
+      justify-content: center;
+      gap: 48px;
+      margin-top: 56px;
+      padding-top: 40px;
+      border-top: 1px solid var(--surface);
+    }
+
+    .stat {
+      text-align: center;
+    }
+
+    .stat-number {
+      display: block;
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .stat-label {
+      font-size: 0.85rem;
+      color: var(--subtext);
+      margin-top: 4px;
+    }
+
+    /* ===== Main Content ===== */
+    .content-wrapper {
+      padding-top: calc(var(--nav-height) + 40px);
+      padding-bottom: 80px;
+    }
+
+    .content {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ===== Typography ===== */
+    .content h1 {
+      font-size: 2.25rem;
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .content h2 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      margin-top: 48px;
+      margin-bottom: 16px;
+      color: var(--text);
+      padding-bottom: 8px;
+      border-bottom: 1px solid var(--surface);
+    }
+
+    .content h3 {
+      font-size: 1.25rem;
+      font-weight: 600;
+      margin-top: 36px;
+      margin-bottom: 12px;
+      color: var(--text);
+    }
+
+    .content h4 {
+      font-size: 1.05rem;
+      font-weight: 600;
+      margin-top: 28px;
+      margin-bottom: 8px;
+      color: var(--subtext);
+    }
+
+    .content p {
+      margin-bottom: 16px;
+      color: var(--text);
+    }
+
+    .content a {
+      color: var(--mauve);
+      text-decoration: none;
+      border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
+    }
+
+    .content a:hover {
+      border-bottom-color: var(--mauve);
+    }
+
+    .content ul, .content ol {
+      margin-bottom: 16px;
+      padding-left: 24px;
+    }
+
+    .content li {
+      margin-bottom: 6px;
+    }
+
+    .content li::marker {
+      color: var(--mauve);
+    }
+
+    .content strong {
+      font-weight: 600;
+      color: var(--text);
+    }
+
+    .content em {
+      color: var(--subtext);
+    }
+
+    .content hr {
+      border: none;
+      height: 1px;
+      background-color: var(--surface);
+      margin: 40px 0;
+    }
+
+    .content blockquote {
+      border-left: 3px solid var(--mauve);
+      margin: 24px 0;
+      padding: 12px 20px;
+      background-color: rgba(203, 166, 247, 0.05);
+      border-radius: 0 8px 8px 0;
+      color: var(--subtext);
+    }
+
+    .content blockquote p:last-child {
+      margin-bottom: 0;
+    }
+
+    /* ===== Code Blocks ===== */
+    .content code {
+      font-family: "SF Mono", "Fira Code", "Fira Mono", "Roboto Mono",
+        "Courier New", monospace;
+      font-size: 0.875em;
+      background-color: var(--overlay);
+      padding: 2px 6px;
+      border-radius: 4px;
+      color: var(--peach);
+    }
+
+    .content pre {
+      background-color: var(--overlay);
+      border-radius: 8px;
+      padding: 20px;
+      overflow-x: auto;
+      margin-bottom: 24px;
+      border: 1px solid rgba(205, 214, 244, 0.06);
+    }
+
+    .content pre code {
+      background: none;
+      padding: 0;
+      border-radius: 0;
+      font-size: 0.85rem;
+      line-height: 1.65;
+      color: var(--text);
+    }
+
+    /* ===== Tables ===== */
+    .content table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+      font-size: 0.9rem;
+    }
+
+    .content thead th {
+      text-align: left;
+      padding: 12px 16px;
+      background-color: var(--surface);
+      color: var(--text);
+      font-weight: 600;
+      border-bottom: 2px solid var(--overlay);
+    }
+
+    .content thead th:first-child {
+      border-radius: 8px 0 0 0;
+    }
+
+    .content thead th:last-child {
+      border-radius: 0 8px 0 0;
+    }
+
+    .content tbody td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--surface);
+      color: var(--subtext);
+    }
+
+    .content tbody tr:hover {
+      background-color: rgba(49, 50, 68, 0.5);
+    }
+
+    .content tbody tr:last-child td:first-child {
+      border-radius: 0 0 0 8px;
+    }
+
+    .content tbody tr:last-child td:last-child {
+      border-radius: 0 0 8px 0;
+    }
+
+    /* ===== Images ===== */
+    .content img {
+      max-width: 100%;
+      height: auto;
+      border-radius: 8px;
+      margin: 16px 0;
+    }
+
+    /* ===== Footer ===== */
+    .footer {
+      border-top: 1px solid var(--surface);
+      padding: 32px 24px;
+      text-align: center;
+      color: var(--subtext);
+      font-size: 0.85rem;
+    }
+
+    .footer a {
+      color: var(--mauve);
+      text-decoration: none;
+    }
+
+    .footer a:hover {
+      text-decoration: underline;
+    }
+
+    .footer-inner {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    /* ===== Mobile Responsive ===== */
+    @media (max-width: 768px) {
+      .nav-toggle {
+        display: block;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background-color: rgba(30, 30, 46, 0.98);
+        backdrop-filter: blur(12px);
+        -webkit-backdrop-filter: blur(12px);
+        border-bottom: 1px solid var(--surface);
+        padding: 12px 24px 20px;
+        gap: 4px;
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-links a {
+        padding: 10px 14px;
+        font-size: 1rem;
+      }
+
+      .hero {
+        padding: 120px 20px 60px;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero .tagline {
+        font-size: 1.05rem;
+      }
+
+      .hero-stats {
+        gap: 24px;
+        flex-wrap: wrap;
+      }
+
+      .stat-number {
+        font-size: 1.5rem;
+      }
+
+      .content h1 {
+        font-size: 1.75rem;
+      }
+
+      .content h2 {
+        font-size: 1.35rem;
+      }
+
+      .content pre {
+        padding: 14px;
+        border-radius: 6px;
+      }
+
+      .content table {
+        display: block;
+        overflow-x: auto;
+        white-space: nowrap;
+      }
+
+      .footer-inner {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero h1 {
+        font-size: 1.65rem;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 280px;
+        justify-content: center;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Navigation -->
+  <nav class="nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="{{ site.baseurl }}/" class="nav-brand">10X Unicorn</a>
+      <button class="nav-toggle" aria-label="Toggle navigation" aria-expanded="false">
+        <svg viewBox="0 0 24 24" class="hamburger-icon">
+          <line x1="3" y1="6" x2="21" y2="6"/>
+          <line x1="3" y1="12" x2="21" y2="12"/>
+          <line x1="3" y1="18" x2="21" y2="18"/>
+        </svg>
+        <svg viewBox="0 0 24 24" class="close-icon" style="display:none;">
+          <line x1="6" y1="6" x2="18" y2="18"/>
+          <line x1="6" y1="18" x2="18" y2="6"/>
+        </svg>
+      </button>
+      <ul class="nav-links">
+        <li><a href="{{ site.baseurl }}/"{% if page.url == '/' %} class="active"{% endif %}>Home</a></li>
+        <li><a href="{{ site.baseurl }}/skills/"{% if page.url contains '/skills' %} class="active"{% endif %}>Skills</a></li>
+        <li><a href="{{ site.baseurl }}/architecture/"{% if page.url contains '/architecture' %} class="active"{% endif %}>Architecture</a></li>
+        <li><a href="{{ site.baseurl }}/getting-started/"{% if page.url contains '/getting-started' %} class="active"{% endif %}>Getting Started</a></li>
+        <li><a href="{{ site.baseurl }}/troubleshooting/"{% if page.url contains '/troubleshooting' %} class="active"{% endif %}>Troubleshooting</a></li>
+      </ul>
+    </div>
+  </nav>
+
+  {% if page.hero %}
+  <!-- Hero Section -->
+  <section class="hero">
+    <h1>{{ page.hero_title | default: site.title }}</h1>
+    <p class="tagline">{{ page.hero_tagline | default: site.description }}</p>
+    {% if page.hero_actions %}
+    <div class="hero-actions">
+      {% for action in page.hero_actions %}
+      <a href="{{ action.url }}" class="btn {{ action.style | default: 'btn-secondary' }}">{{ action.label }}</a>
+      {% endfor %}
+    </div>
+    {% endif %}
+    {% if page.hero_stats %}
+    <div class="hero-stats">
+      {% for stat in page.hero_stats %}
+      <div class="stat">
+        <span class="stat-number" style="color: {{ stat.color | default: 'var(--mauve)' }}">{{ stat.number }}</span>
+        <span class="stat-label">{{ stat.label }}</span>
+      </div>
+      {% endfor %}
+    </div>
+    {% endif %}
+  </section>
+  {% endif %}
+
+  <!-- Main Content -->
+  <main class="content-wrapper"{% if page.hero %} style="padding-top: 0;"{% endif %}>
+    <div class="content">
+      {{ content }}
+    </div>
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <div class="footer-inner">
+      <span>&copy; {{ site.time | date: '%Y' }} {{ site.title }}</span>
+      <span>
+        <a href="https://github.com/{{ site.repository }}">GitHub</a>
+        &nbsp;&middot;&nbsp;
+        Built with <a href="https://claude.ai/claude-code">Claude Code</a>
+      </span>
+    </div>
+  </footer>
+
+  <!-- Mermaid Diagrams -->
+  <script type="module">
+    import mermaid from 'https://cdn.jsdelivr.net/npm/mermaid@11/dist/mermaid.esm.min.mjs';
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: 'dark',
+      themeVariables: {
+        darkMode: true,
+        background: '#1e1e2e',
+        primaryColor: '#89b4fa',
+        primaryTextColor: '#cdd6f4',
+        primaryBorderColor: '#74c7ec',
+        lineColor: '#a6adc8',
+        secondaryColor: '#f5c2e7',
+        tertiaryColor: '#313244'
+      }
+    });
+  </script>
+
+  <!-- Mobile Navigation Toggle -->
+  <script>
+    (function() {
+      var toggle = document.querySelector('.nav-toggle');
+      var navLinks = document.querySelector('.nav-links');
+      var hamburger = toggle.querySelector('.hamburger-icon');
+      var closeIcon = toggle.querySelector('.close-icon');
+
+      toggle.addEventListener('click', function() {
+        var isOpen = navLinks.classList.toggle('open');
+        toggle.setAttribute('aria-expanded', isOpen);
+        hamburger.style.display = isOpen ? 'none' : 'block';
+        closeIcon.style.display = isOpen ? 'block' : 'none';
+      });
+
+      // Close menu when a link is clicked
+      navLinks.querySelectorAll('a').forEach(function(link) {
+        link.addEventListener('click', function() {
+          navLinks.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+          hamburger.style.display = 'block';
+          closeIcon.style.display = 'none';
+        });
+      });
+
+      // Close menu on escape key
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Escape' && navLinks.classList.contains('open')) {
+          navLinks.classList.remove('open');
+          toggle.setAttribute('aria-expanded', 'false');
+          hamburger.style.display = 'block';
+          closeIcon.style.display = 'none';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

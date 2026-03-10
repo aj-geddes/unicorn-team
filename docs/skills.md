@@ -1,0 +1,272 @@
+---
+layout: default
+title: "Skills - 10X Developer Unicorn"
+description: "Deep dive into the 18 skills that encode senior engineering expertise: code reading, pattern transfer, estimation, self-verification, and more."
+permalink: /skills/
+---
+
+# Skills
+
+The 10X Developer Unicorn plugin is built on a skill system. Each skill is a `SKILL.md` file with YAML frontmatter that tells Claude Code *when* to activate it and *how* to use it. Skills can have co-located `scripts/` for automation and `references/` for detailed documentation.
+
+```
+skills/
+  orchestrator/
+    SKILL.md           # Activation rules + core logic
+    scripts/           # Automation scripts
+    references/        # Detailed docs, examples
+```
+
+Skills compose. The developer agent draws on `python`, `testing`, and `security` domain skills during implementation. The polyglot agent uses `language-learning` and `pattern-transfer`. The orchestrator routes to all of them.
+
+---
+
+## Skill Categories
+
+```mermaid
+%%{init: {'theme': 'base', 'themeVariables': {'primaryColor': '#89b4fa', 'primaryTextColor': '#cdd6f4', 'primaryBorderColor': '#74c7ec', 'lineColor': '#a6adc8', 'secondaryColor': '#f5c2e7', 'tertiaryColor': '#1e1e2e', 'background': '#1e1e2e', 'mainBkg': '#313244', 'nodeBorder': '#74c7ec', 'clusterBkg': '#181825', 'titleColor': '#cdd6f4', 'edgeLabelBackground': '#313244'}}}%%
+graph TB
+    subgraph Agents["Agent Skills"]
+        O["orchestrator"]
+        AR["architect"]
+        DEV["developer"]
+        QA["qa-security"]
+        DVO["agent-devops"]
+        PO["polyglot"]
+    end
+
+    subgraph Meta["Meta Skills"]
+        CR["code-reading"]
+        PT["pattern-transfer"]
+        SV["self-verification"]
+        ES["estimation"]
+        TD["technical-debt"]
+        LL["language-learning"]
+        HVS["hvs-skill-buddy"]
+    end
+
+    subgraph Domain["Domain Skills"]
+        PY["python"]
+        JS["javascript"]
+        TE["testing"]
+        SE["security"]
+        DD["domain-devops"]
+    end
+
+    O --> DEV
+    O --> AR
+    O --> QA
+    O --> DVO
+    O --> PO
+
+    DEV --> PY
+    DEV --> JS
+    DEV --> TE
+    DEV --> SE
+    DEV --> CR
+    DEV --> PT
+    DEV --> SV
+
+    PO --> LL
+    PO --> PT
+
+    QA --> SE
+    QA --> TE
+
+    DVO --> DD
+    DVO --> SE
+
+    style Agents fill:#1e1e2e,stroke:#89b4fa,color:#cdd6f4
+    style Meta fill:#1e1e2e,stroke:#cba6f7,color:#cdd6f4
+    style Domain fill:#1e1e2e,stroke:#a6e3a1,color:#cdd6f4
+
+    style O fill:#89b4fa,stroke:#89b4fa,color:#1e1e2e
+    style AR fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
+    style DEV fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
+    style QA fill:#fab387,stroke:#fab387,color:#1e1e2e
+    style DVO fill:#74c7ec,stroke:#74c7ec,color:#1e1e2e
+    style PO fill:#f9e2af,stroke:#f9e2af,color:#1e1e2e
+
+    style CR fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
+    style PT fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
+    style SV fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
+    style ES fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
+    style TD fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
+    style LL fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
+    style HVS fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
+
+    style PY fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
+    style JS fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
+    style TE fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
+    style SE fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
+    style DD fill:#a6e3a1,stroke:#a6e3a1,color:#1e1e2e
+```
+
+---
+
+## Agent Skills
+
+Agent skills define the specialized roles in the unicorn team. Each agent runs as a subagent with its own 200K context window, loaded with the skills it needs.
+
+### Orchestrator
+
+**Triggers**: "implement", "build", "create", "design system", "deploy", "refactor", "fix bug", "estimate", "architecture"
+
+The brain of the system. Analyzes incoming tasks, routes them to the right agent, and enforces quality gates at every handoff. Never implements directly -- it coordinates.
+
+- Routes simple features to Developer, complex ones through Architect first
+- Breaks multi-domain tasks into parallel delegations
+- Enforces TDD and self-verification on every implementation
+- Manages context budgets across subagents
+
+### Architect
+
+**Triggers**: "design a system", "architecture review", "how do we scale", "write an ADR", "API contract", "data model", "tradeoff analysis"
+
+Produces design artifacts, not code. Creates Architecture Decision Records, API contracts, data models, and Mermaid diagrams. Evaluates patterns and documents tradeoffs so the Developer agent has clear guidance.
+
+### Developer
+
+**Triggers**: "implement", "build", "code", "write code", "fix bug", "debug", "refactor", "TDD"
+
+The workhorse. Handles all code implementation with strict TDD discipline: RED (failing test), GREEN (make it pass), REFACTOR (improve), VERIFY (self-review). Supports Python, JavaScript/TypeScript, Go, and Rust. Delegates to domain skills for language-specific idioms.
+
+### QA-Security
+
+**Triggers**: "review", "code review", "security review", "audit", "vulnerability", "threat model", "OWASP"
+
+The final quality gate. Reviews code before merge, runs security analysis (STRIDE, OWASP), checks test coverage, and provides structured approval/rejection with findings. Acts as the team's harshest critic -- in a constructive way.
+
+### DevOps (Agent)
+
+**Triggers**: "deploy", "CI/CD", "pipeline", "Docker", "Kubernetes", "Terraform", "monitoring", "observability"
+
+Makes code run reliably in production. Creates CI/CD pipelines, writes Infrastructure-as-Code, configures Kubernetes deployments, sets up monitoring and observability. Handles blue-green and canary deployment strategies.
+
+### Polyglot
+
+**Triggers**: "new language", "learn language", "translate pattern", "port from X to Y", "migrate to", "unfamiliar language"
+
+The language specialist. Rapidly acquires new languages and frameworks through a structured protocol, then hands off knowledge to the Developer agent. Identifies paradigm similarities, finds canonical examples, and creates quick references.
+
+---
+
+## Meta Skills
+
+Meta skills encode the engineering judgment that separates senior developers from junior ones. These are the skills that most AI tools lack entirely.
+
+### Code Reading
+
+**Triggers**: "understand this code", "how does this work", "legacy code", "what does this do", "explain this codebase"
+
+Professional developers spend 80% of their time reading code, not writing it. This skill provides a strategic reading protocol: find entry points, trace data flow, identify error paths, map integration boundaries. Four comprehension levels from "what does it DO?" to "what ELSE does this affect?"
+
+### Pattern Transfer
+
+**Triggers**: "I've seen this before", "this is like X but in Y", "there must be a pattern", "equivalent of", "idiomatic way"
+
+A 10X developer sees the same problem in different clothes. The Observer pattern in OOP is event emitters in JS is pub/sub in messaging is webhooks in APIs. This skill recognizes problem classes (state management, async coordination, caching, rate limiting, retry logic) and transfers proven solutions across domains.
+
+### Self-Verification
+
+**Triggers**: "review my code", "check my work", "before commit", "self-review", "quality check"
+
+The biggest gap in AI coding: generating code and considering it done. This skill enforces a 6-step pre-commit protocol -- diff review, completeness check, quality check, test verification, security check, documentation check. Includes the "fresh eyes" technique for catching what your brain glosses over.
+
+### Estimation
+
+**Triggers**: "estimate", "how long will this take", "sizing", "scope this", "story points", "project timeline"
+
+Bad estimates destroy trust. This skill uses risk-based estimation with decomposition into atomic units, three-point estimates (optimistic/realistic/pessimistic), PERT formula calculation, explicit risk buffers, and integration buffers. Outputs include confidence levels, stated assumptions, and identified risks.
+
+### Technical Debt
+
+**Triggers**: "technical debt", "code shortcut", "pay down debt", "temporary hack", "missing tests", "refactor plan"
+
+Every shortcut has a cost. This skill classifies debt using the debt quadrant (deliberate vs. inadvertent, reckless vs. prudent), tracks it with structured records, quantifies ongoing interest, and prioritizes paydown. Helps teams make deliberate decisions about when to take shortcuts and when to pay them back.
+
+### Language Learning
+
+**Triggers**: "learn Rust", "learn Go", "new language", "getting started with", "never used X before"
+
+A structured 5-phase protocol for rapidly acquiring new programming languages: exploration (syntax, types, control flow), patterns (iteration, collections, null handling, async), ecosystem (package manager, testing, linting), idioms (community conventions, anti-patterns), and production (deployment, monitoring, performance).
+
+### HVS Skill Buddy
+
+**Triggers**: "skill buddy", "audit my skills", "create a new skill", "build a skill", "skill system"
+
+The meta-skill for the skill system itself. Audits existing skills for drift and inconsistency, creates new skills that fit the system standard, and keeps skills current with the latest patterns. Your guide to extending the unicorn team.
+
+---
+
+## Domain Skills
+
+Domain skills provide language-specific and technology-specific patterns that agent skills draw on during execution.
+
+### Python
+
+**Triggers**: "python project", "pyproject.toml", "ruff", "mypy", "pytest", "type hints", "pydantic"
+
+Modern Python development: project structure with pyproject.toml, ruff for linting/formatting, mypy for type checking, pytest patterns (fixtures, parametrize, conftest), dataclasses vs. Pydantic, async patterns with asyncio.
+
+### JavaScript
+
+**Triggers**: "typescript", "javascript", "tsconfig", "eslint", "react", "node.js", "vitest", "jest"
+
+JavaScript and TypeScript development: project setup, ESLint/Prettier configuration, vitest/jest testing patterns, React hooks and component patterns, Node.js backend patterns, type guards and discriminated unions.
+
+### Testing
+
+**Triggers**: "write tests", "TDD", "test coverage", "mock", "flaky test", "unit test", "integration test", "e2e test"
+
+Cross-language test strategy: choosing between unit/integration/e2e tests, Arrange-Act-Assert structure, effective mocking, handling flaky tests, coverage targets, designing testable code. The patterns that apply regardless of language.
+
+### Security
+
+**Triggers**: "security review", "vulnerability", "authentication", "input validation", "XSS", "SQL injection", "OWASP"
+
+Application-level security with an attacker's mindset: defense-in-depth, input validation, output encoding, authentication and authorization patterns, secrets management, threat modeling with STRIDE, dependency auditing.
+
+### DevOps (Domain)
+
+**Triggers**: "dockerize", "CI/CD", "kubernetes", "monitoring", "logging", "metrics", "helm", "GitOps"
+
+Infrastructure patterns and practices: Dockerfile optimization, CI/CD pipeline design, Kubernetes deployment patterns, observability (structured logging, metrics, distributed tracing), health checks, scaling strategies.
+
+---
+
+## How Skills Compose
+
+Skills don't work in isolation. When the Developer agent implements a Python feature:
+
+1. **developer** skill provides the TDD protocol and implementation workflow
+2. **python** skill provides language-specific idioms, tooling, and project structure
+3. **testing** skill provides test strategy and pattern guidance
+4. **security** skill flags potential vulnerabilities during implementation
+5. **self-verification** skill runs the pre-commit checklist before finishing
+6. **code-reading** skill activates if the developer needs to understand existing code first
+
+The orchestrator decides which skills each agent needs and loads them into its context window.
+
+---
+
+## Create Your Own Skill
+
+Every skill follows the same structure:
+
+```yaml
+---
+name: my-skill
+description: >-
+  Third-person description. ALWAYS trigger on "phrase1", "phrase2", "phrase3".
+  Use when [conditions]. Different from [sibling] which [difference].
+---
+```
+
+Guidelines:
+- **Under 500 lines** (target 150-300; split large content to `references/`)
+- **Action over explanation** -- decision tables and checklists over prose
+- **Co-locate scripts** in the skill's `scripts/` directory
+- **Valid frontmatter** with trigger phrases and differentiation from related skills
+
+Use the [HVS Skill Buddy](#hvs-skill-buddy) to create skills that fit the system standard, or read the [Getting Started guide]({{ site.baseurl }}/getting-started/) for contributor setup.

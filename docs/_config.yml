@@ -1,0 +1,36 @@
+title: "10X Developer Unicorn"
+description: "A Claude Code plugin that encodes the hidden 80% of software engineering expertise into 18 skills across 6 specialized agents."
+url: "https://aj-geddes.github.io"
+baseurl: "/unicorn-team"
+author:
+  name: "aj-geddes"
+  url: "https://github.com/aj-geddes"
+repository: "aj-geddes/unicorn-team"
+logo: /assets/images/og-image.png
+twitter:
+  card: summary_large_image
+social:
+  name: "10X Developer Unicorn"
+  links:
+    - "https://github.com/aj-geddes/unicorn-team"
+
+markdown: kramdown
+permalink: /:title/
+
+plugins:
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+
+sass:
+  style: compressed
+
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"

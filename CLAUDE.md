@@ -100,9 +100,9 @@ Complex multi-domain   -> Parallel delegation
 
 ## Architecture Reference
 
-- `docs/architecture.md` - Agent specs, workflows, token management
-- `docs/hidden-skills.md` - The 80% skills (code reading, pattern transfer, etc.)
-- `docs/implementation-guide.md` - Directory structure, quickstart
+- `docs/architecture.md` - Agent specs, workflows, delegation design
+- `docs/skills.md` - All 18 skills, composition, and creation guide
+- `docs/getting-started.md` - Installation and first task walkthrough
 
 ## Repository
 
