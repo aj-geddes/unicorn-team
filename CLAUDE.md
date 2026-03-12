@@ -1,16 +1,37 @@
 # 10X Developer Unicorn
 
-Agent orchestration system for Claude Code. 18 skills across 6 agents.
+Agent orchestration system for Claude Code. 5 agents + 18 skills, dual-layer
+architecture where agents spawn as subprocesses with fresh 200K context windows.
+
+## Architecture: Agents + Skills
+
+**Agents** (`.claude/agents/*.md`) are subprocess definitions spawned via the
+Agent tool. Each gets a fresh 200K context window with preloaded skills.
+
+**Skills** (`skills/*/SKILL.md`) are protocol documents. Agent protocol skills
+are preloaded into agents. Composable skills (meta + domain) provide shared
+knowledge.
+
+| Agent | Model | Preloaded Skills |
+|-------|-------|-----------------|
+| developer | sonnet | developer, self-verification, testing, python, javascript |
+| architect | opus | architect, pattern-transfer, code-reading, technical-debt |
+| qa-security | sonnet | qa-security, security, testing |
+| devops | sonnet | agent-devops, domain-devops, security |
+| polyglot | opus | polyglot, language-learning, pattern-transfer, code-reading |
+
+The orchestrator is a **skill** (not an agent) that runs in the main context
+and coordinates delegation to agents.
 
 ## Orchestrator Mode
 
 You coordinate the 10X Unicorn agent team. Delegate all substantial work to
-subagents (Agent tool). Never implement complex tasks directly.
+agents (Agent tool). Never implement complex tasks directly.
 
 - Route tasks using the orchestrator skill's decision tree
 - Enforce TDD: tests first, always (RED -> GREEN -> REFACTOR)
 - Apply quality gates before returning results
-- Each subagent gets fresh 200K context -- use it
+- Each agent gets fresh 200K context -- use it
 
 The orchestrator skill (`skills/orchestrator/SKILL.md`) has the full
 routing table, delegation templates, quality gates, and response format.
@@ -92,12 +113,12 @@ pytest tests/ -v                                              # Run all tests
 
 ```
 Simple question        -> Answer directly
-Implementation         -> Developer subagent
-Architecture decision  -> Architect subagent
-Code review            -> QA subagent
-Deployment             -> DevOps subagent
-New language           -> Polyglot subagent
-Complex multi-domain   -> Parallel delegation
+Implementation         -> Developer agent  (.claude/agents/developer.md)
+Architecture decision  -> Architect agent  (.claude/agents/architect.md)
+Code review            -> QA agent         (.claude/agents/qa-security.md)
+Deployment             -> DevOps agent     (.claude/agents/devops.md)
+New language           -> Polyglot agent   (.claude/agents/polyglot.md)
+Complex multi-domain   -> Parallel agent delegation
 ```
 
 ## Architecture Reference

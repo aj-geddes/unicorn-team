@@ -16,6 +16,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).parent.parent
 PLUGIN_DIR = PROJECT_ROOT / ".claude-plugin"
 SKILLS_DIR = PROJECT_ROOT / "skills"
+AGENTS_DIR = PROJECT_ROOT / ".claude" / "agents"
 
 REQUIRED_FIELDS = ["name", "version", "description", "author", "license"]
 
@@ -97,4 +98,11 @@ def test_skills_are_flat():
         f"Found {len(all_skills)} total SKILL.md files but only "
         f"{len(flat_skills)} at the expected flat level. "
         f"Some skills are still nested."
+    )
+
+
+def test_agents_directory_exists():
+    """The .claude/agents directory must exist for agent definitions."""
+    assert AGENTS_DIR.exists(), (
+        f".claude/agents directory not found at {AGENTS_DIR}"
     )

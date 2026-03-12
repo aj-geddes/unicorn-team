@@ -21,9 +21,10 @@ claude plugin install unicorn-team@unicorn-team
 
 ### What Happens After Install
 
-1. **Skills discovered** -- All 18 SKILL.md files are registered with Claude Code. The orchestrator, agents, meta skills, and domain skills are all available immediately.
-2. **Hooks registered** -- Pre-commit hooks are wired to enforce quality gates: tests must pass, coverage must meet threshold, no debug code, no secrets in staged files.
-3. **Orchestrator activated** -- Claude Code now routes tasks through the orchestrator decision tree instead of handling everything in a single context window.
+1. **Agents registered** -- 5 agent definitions in `.claude/agents/` are available for subprocess spawning via the Agent tool, each with its own 200K context window.
+2. **Skills discovered** -- All 18 SKILL.md files are registered with Claude Code. Agent protocol skills are preloaded into agents; meta and domain skills provide shared knowledge.
+3. **Hooks registered** -- Pre-commit hooks are wired to enforce quality gates: tests must pass, coverage must meet threshold, no debug code, no secrets in staged files.
+4. **Orchestrator activated** -- Claude Code now routes tasks through the orchestrator decision tree, delegating to agents instead of handling everything in a single context window.
 
 You don't need to memorize trigger phrases or manually invoke skills. Just describe what you want. The orchestrator handles routing.
 
@@ -147,13 +148,21 @@ pytest tests/ -v && ./scripts/validate.sh
 
 ```
 unicorn-team/
+  .claude/
+    agents/               # Agent definitions (spawn as subprocesses)
+      developer.md        # TDD implementation agent (sonnet)
+      architect.md        # System design agent (opus)
+      qa-security.md      # Code review and security agent (sonnet)
+      devops.md           # Infrastructure and deployment agent (sonnet)
+      polyglot.md         # Language specialist agent (opus)
+    skills/               # Symlinks to skills/ for discovery
   skills/
-    orchestrator/         # Task routing and coordination
-    architect/            # System design agent
-    developer/            # TDD implementation agent
-    qa-security/          # Code review and security agent
-    agent-devops/         # Infrastructure and deployment agent
-    polyglot/             # Language specialist agent
+    orchestrator/         # Task routing and coordination (skill, not agent)
+    architect/            # Architect agent protocol skill
+    developer/            # Developer agent protocol skill
+    qa-security/          # QA-Security agent protocol skill
+    agent-devops/         # DevOps agent protocol skill
+    polyglot/             # Polyglot agent protocol skill
     code-reading/         # Codebase comprehension
     pattern-transfer/     # Cross-domain pattern recognition
     self-verification/    # Pre-commit self-review

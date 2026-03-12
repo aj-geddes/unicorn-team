@@ -7,7 +7,7 @@ permalink: /architecture/
 
 # Architecture
 
-The 10X Developer Unicorn uses an **orchestrator-first design**: a lightweight coordinator that never implements directly, backed by 5 specialized agents that each get their own fresh 200K context window. The result is a system that scales with complexity instead of drowning in it.
+The 10X Developer Unicorn uses an **orchestrator-first design**: a lightweight coordinator skill in the main context, backed by 5 specialized agents defined in `.claude/agents/` that spawn as subprocesses via the Agent tool. Each agent gets its own fresh 200K context window with preloaded skills, providing true context isolation.
 
 ---
 
@@ -39,14 +39,28 @@ The 10X Developer Unicorn uses an **orchestrator-first design**: a lightweight c
   </div>
 </div>
 
-| Agent | Role | Key Outputs |
-|-------|------|-------------|
-| **Orchestrator** | Routes tasks, coordinates agents, enforces quality gates | Delegation plans, aggregated results, gate status |
-| **Architect** | System design, pattern selection, tradeoff analysis | ADRs, Mermaid diagrams, API contracts, data models |
-| **Developer** | Full-stack TDD implementation (Python, JS/TS, Go, Rust) | Code + tests, coverage reports, self-review results |
-| **QA-Security** | Code review, security audits, quality gate enforcement | Approval/rejection with findings, security reports |
-| **DevOps** | CI/CD, infrastructure, deployment, monitoring | Pipelines, IaC configs, K8s manifests, observability setup |
-| **Polyglot** | Language acquisition, cross-ecosystem pattern transfer | Quick references, paradigm maps, migration guides |
+| Component | Type | Definition | Role |
+|-----------|------|------------|------|
+| **Orchestrator** | Skill | `skills/orchestrator/SKILL.md` | Routes tasks, coordinates agents, enforces quality gates |
+| **Architect** | Agent | `.claude/agents/architect.md` | System design, pattern selection, tradeoff analysis |
+| **Developer** | Agent | `.claude/agents/developer.md` | Full-stack TDD implementation (Python, JS/TS, Go, Rust) |
+| **QA-Security** | Agent | `.claude/agents/qa-security.md` | Code review, security audits, quality gate enforcement |
+| **DevOps** | Agent | `.claude/agents/devops.md` | CI/CD, infrastructure, deployment, monitoring |
+| **Polyglot** | Agent | `.claude/agents/polyglot.md` | Language acquisition, cross-ecosystem pattern transfer |
+
+### Agent Definitions
+
+Each agent is defined as a `.md` file in `.claude/agents/` with frontmatter specifying model, tools, and preloaded skills:
+
+| Agent | Model | Preloaded Skills |
+|-------|-------|-----------------|
+| developer | sonnet | developer, self-verification, testing, python, javascript |
+| architect | opus | architect, pattern-transfer, code-reading, technical-debt |
+| qa-security | sonnet | qa-security, security, testing |
+| devops | sonnet | agent-devops, domain-devops, security |
+| polyglot | opus | polyglot, language-learning, pattern-transfer, code-reading |
+
+Agent protocol skills (developer, architect, qa-security, agent-devops, polyglot) contain the detailed protocols but are not triggered directly -- they are preloaded into their respective agents via the `skills` frontmatter field.
 
 ---
 
@@ -141,7 +155,7 @@ Context windows are the scarcest resource in an AI system. The unicorn architect
 
 **Subagents get fresh context**
 
-Each subagent invocation starts with a clean 200K context window. The orchestrator passes only what's needed:
+Each agent invocation (via the Agent tool with `.claude/agents/*.md` definitions) starts with a clean 200K context window. The orchestrator passes only what's needed:
 
 - Task description (~500 tokens)
 - Relevant context (~2-3K tokens)

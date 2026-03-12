@@ -1,13 +1,10 @@
 ---
 name: developer
 description: >-
-  Guides the user through TDD-first implementation across Python, JS/TS, Go,
-  and Rust. ALWAYS trigger on "implement", "build", "code", "write code",
-  "create feature", "add feature", "fix bug", "debug", "refactor",
-  "write tests", "TDD", "red green refactor", "implementation".
-  Use when writing new code, fixing bugs, or refactoring existing code.
-  Different from architect (which designs systems) and qa-security (which
-  reviews code). Delegates to domain skills for language-specific idioms.
+  Protocol skill preloaded by the Developer agent. Provides TDD-first
+  implementation workflow across Python, JS/TS, Go, and Rust. Covers
+  RED-GREEN-REFACTOR cycle, debugging protocol, language routing, refactoring
+  protocol, and quality requirements. Not triggered directly.
 ---
 
 # Developer Agent

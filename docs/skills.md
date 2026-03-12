@@ -26,7 +26,7 @@ Skills compose. The developer agent draws on `python`, `testing`, and `security`
 <div class="diagram">
   <div class="skill-map">
     <div class="skill-group" style="border-color: var(--blue);">
-      <div class="skill-group-title text-blue">Agent Skills</div>
+      <div class="skill-group-title text-blue">Agent Protocol Skills</div>
       <span class="skill-tag bg-blue">orchestrator</span>
       <span class="skill-tag bg-mauve">architect</span>
       <span class="skill-tag bg-green">developer</span>
@@ -57,9 +57,17 @@ Skills compose. The developer agent draws on `python`, `testing`, and `security`
 
 ---
 
-## Agent Skills
+## Agent Protocol Skills
 
-Agent skills define the specialized roles in the unicorn team. Each agent runs as a subagent with its own 200K context window, loaded with the skills it needs.
+Agent protocol skills define the detailed protocols preloaded by agent definitions in `.claude/agents/`. Each agent spawns as a subprocess via the Agent tool with its own 200K context window. These skills are not triggered directly -- they are loaded into agents via the `skills` frontmatter field.
+
+| Agent Definition | Preloaded Skills |
+|-----------------|-----------------|
+| `.claude/agents/developer.md` | developer, self-verification, testing, python, javascript |
+| `.claude/agents/architect.md` | architect, pattern-transfer, code-reading, technical-debt |
+| `.claude/agents/qa-security.md` | qa-security, security, testing |
+| `.claude/agents/devops.md` | agent-devops, domain-devops, security |
+| `.claude/agents/polyglot.md` | polyglot, language-learning, pattern-transfer, code-reading |
 
 ### Orchestrator
 

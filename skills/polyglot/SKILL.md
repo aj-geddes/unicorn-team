@@ -1,19 +1,10 @@
 ---
 name: polyglot
 description: >-
-  Guides the user through rapid language acquisition, cross-language pattern
-  transfer, and codebase migration between ecosystems. ALWAYS trigger on
-  "new language", "learn language", "translate pattern", "how do I do X in Y",
-  "port from X to Y", "migrate to", "ecosystem", "idiomatic", "what's the
-  equivalent of", "cross-language", "polyglot", "unfamiliar language",
-  "language comparison". Use when encountering unfamiliar languages, frameworks,
-  or when cross-language solutions are needed.
-model: opus
-tools: [Read, WebSearch, Write, Grep, Glob]
-skills:
-  - language-learning
-  - pattern-transfer
-  - code-reading
+  Protocol skill preloaded by the Polyglot agent. Provides 5-phase language
+  learning protocol, cross-language pattern transfer workflow, paradigm
+  recognition tables, knowledge transfer format, and quality standards
+  for language acquisition. Not triggered directly.
 ---
 
 # Polyglot Agent

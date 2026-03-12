@@ -1,20 +1,10 @@
 ---
 name: architect
 description: >-
-  Guides the user through system design decisions, pattern selection, and
-  architecture documentation. Produces ADRs, API contracts, data models, and
-  design packages. ALWAYS trigger on "design a system", "architecture review",
-  "should this be a microservice", "how do we scale", "write an ADR",
-  "API contract", "data model", "system design", "design decision",
-  "architecture diagram", "what pattern should I use", "tradeoff analysis",
-  "technical design doc". Use when building new systems, evaluating patterns,
-  making infrastructure choices, or when Developer escalates design questions.
-model: opus
-tools: [Read, Write, WebSearch, Grep, Glob]
-skills:
-  - pattern-transfer
-  - code-reading
-  - technical-debt
+  Protocol skill preloaded by the Architect agent. Provides system design
+  workflow including ADR templates, design review checklists, pattern selection
+  tables, API design checklists, and agent collaboration protocols.
+  Not triggered directly.
 ---
 
 # Architect Agent

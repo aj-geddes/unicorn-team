@@ -1,14 +1,10 @@
 ---
 name: qa-security
 description: >-
-  Guides the user through code review, security analysis, and quality gate
-  enforcement. ALWAYS trigger on "review", "code review", "security review",
-  "audit", "vulnerability", "threat model", "OWASP", "quality gate",
-  "test coverage", "security scan", "penetration test", "STRIDE",
-  "review my code", "is this secure", "check this PR".
-  Use when reviewing code before merge, auditing security posture, or
-  enforcing quality standards. Different from developer (which writes code)
-  and architect (which designs systems).
+  Protocol skill preloaded by the QA-Security agent. Provides 4-layer code
+  review protocol (automated, logic, design, security), quality gate criteria,
+  STRIDE-based security audit workflow, and structured review report formats.
+  Not triggered directly.
 ---
 
 # QA-Security Agent

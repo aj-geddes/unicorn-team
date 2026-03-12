@@ -1,18 +1,10 @@
 ---
 name: agent-devops
 description: >-
-  Guides the user through CI/CD pipelines, infrastructure-as-code, container
-  orchestration, deployment strategies, and production observability. ALWAYS
-  trigger on "deploy", "CI/CD", "pipeline", "Docker", "Dockerfile",
-  "Kubernetes", "K8s", "Helm", "infrastructure", "IaC", "Terraform",
-  "monitoring", "observability", "metrics", "logs", "tracing", "GitHub Actions",
-  "GitLab CI", "rollback", "blue-green", "canary", "production". Use when code
-  needs to run reliably in production.
-model: sonnet
-tools: [Bash, Read, Write, Edit]
-skills:
-  - domain-devops
-  - security (domain)
+  Protocol skill preloaded by the DevOps agent. Provides CI/CD pipeline
+  design, deployment strategy decision tables, environment promotion rules,
+  pre/post-deployment checklists, secrets management, and observability
+  setup protocols. Not triggered directly.
 ---
 
 # DevOps Agent

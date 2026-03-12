@@ -5,14 +5,14 @@
     "url": "https://github.com/aj-geddes"
   },
   "metadata": {
-    "description": "Agent orchestration system with 18 skills across 6 agents encoding the hidden 80% of software engineering expertise.",
-    "version": "1.0.0"
+    "description": "Agent orchestration system with 5 subprocess agents and 18 skills encoding the hidden 80% of software engineering expertise. Agents spawn with fresh 200K context windows for true context isolation.",
+    "version": "2.0.0"
   },
   "plugins": [
     {
       "name": "unicorn-team",
       "source": "./",
-      "description": "Agent orchestration system with 18 skills across 6 agents encoding the hidden 80% of software engineering expertise."
+      "description": "Agent orchestration system with 5 subprocess agents and 18 skills encoding the hidden 80% of software engineering expertise. Agents spawn with fresh 200K context windows for true context isolation."
     }
   ]
 }

@@ -45,35 +45,36 @@ Incoming Task
 +- Complex (multi-domain)?  -> Parallel delegation -> Aggregate
 ```
 
-## Agent Squad
+## Agent Invocation
 
-| Agent | When | Outputs |
-|-------|------|---------|
-| Architect | System design, major refactors, scalability | ADRs, Mermaid diagrams, API contracts, tradeoff analysis |
-| Developer | Any code implementation, scripts, full-stack | Code + tests (always TDD: RED -> GREEN -> REFACTOR) |
-| QA | Code review, security audits, perf testing | Approval/rejection with findings |
-| DevOps | Infrastructure, CI/CD, deployment, monitoring | Pipelines, IaC, K8s configs |
-| Polyglot | New languages, frameworks, paradigms | Quick reference -> hand off to Developer |
+Agents are defined in `.claude/agents/` and spawned via the Agent tool. Each
+gets a fresh 200K context window. The orchestrator is a skill (main context
+coordinator), not an agent.
 
-## Delegation Template
+| Agent Definition | Model | Preloaded Skills | When to Invoke |
+|-----------------|-------|-----------------|----------------|
+| `.claude/agents/developer.md` | sonnet | developer, self-verification, testing, python, javascript | Code implementation, bug fixes, refactoring |
+| `.claude/agents/architect.md` | opus | architect, pattern-transfer, code-reading, technical-debt | System design, ADRs, API contracts, tradeoff analysis |
+| `.claude/agents/qa-security.md` | sonnet | qa-security, security, testing | Code review, security audits, quality gates |
+| `.claude/agents/devops.md` | sonnet | agent-devops, domain-devops, security | CI/CD, IaC, deployment, monitoring |
+| `.claude/agents/polyglot.md` | opus | polyglot, language-learning, pattern-transfer, code-reading | New languages, cross-ecosystem patterns |
 
-```yaml
-delegation:
-  to: [subagent-name]
-  task: |
-    Clear, focused objective. One primary goal.
-  context:
-    - Only relevant information (2-3K tokens max)
-    - File paths if needed
-    - Current state
-  constraints:
-    - Quality requirement (e.g., "coverage >= 80%")
-    - Technology choices (if constrained)
-  expected_output:
-    - Specific deliverables
-    - Result format (summary + paths)
-    - Quality proof (test results)
+## Delegation via Agent Tool
+
+To delegate, use the Agent tool with the agent definition:
+
 ```
+Agent tool call:
+  subagent_type: general-purpose  (or the specific agent type)
+  prompt: |
+    Task: [Clear, focused objective. One primary goal.]
+    Context: [Only relevant info, 2-3K tokens max, file paths]
+    Constraints: [Quality requirements, technology choices]
+    Expected output: [Specific deliverables, format, quality proof]
+```
+
+Keep delegation context lean. Pass file paths, not file contents.
+Agents return summaries and paths -- not full outputs.
 
 See `references/delegation-examples.md` for worked examples.
 
