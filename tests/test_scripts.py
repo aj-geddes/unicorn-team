@@ -19,8 +19,11 @@ SCRIPTS_DIR = PROJECT_ROOT / "scripts"
 SKILLS_DIR = PROJECT_ROOT / "skills"
 
 
+PROTOCOLS_DIR = PROJECT_ROOT / ".claude" / "protocols"
+
+
 def find_all_script_files():
-    """Find all script files in scripts/ and skills/**/scripts/ directories."""
+    """Find all script files in scripts/, skills/**/scripts/, and .claude/protocols/**/scripts/."""
     scripts = []
 
     # Root scripts directory
@@ -33,6 +36,12 @@ def find_all_script_files():
     # Co-located scripts in skill directories
     if SKILLS_DIR.exists():
         for script_file in SKILLS_DIR.rglob("scripts/*.sh"):
+            if script_file.is_file():
+                scripts.append(script_file)
+
+    # Co-located scripts in agent protocol directories
+    if PROTOCOLS_DIR.exists():
+        for script_file in PROTOCOLS_DIR.rglob("scripts/*.sh"):
             if script_file.is_file():
                 scripts.append(script_file)
 
@@ -113,7 +122,7 @@ def test_install_script_exists():
 
 # Co-located script existence tests
 SCRIPT_LOCATIONS = {
-    "tdd.sh": SKILLS_DIR / "developer" / "scripts" / "tdd.sh",
+    "tdd.sh": PROTOCOLS_DIR / "developer" / "scripts" / "tdd.sh",
     "self-review.sh": SKILLS_DIR / "self-verification" / "scripts" / "self-review.sh",
     "estimate.sh": SKILLS_DIR / "estimation" / "scripts" / "estimate.sh",
     "new-language.sh": SKILLS_DIR / "language-learning" / "scripts" / "new-language.sh",

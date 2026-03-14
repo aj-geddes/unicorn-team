@@ -1,10 +1,10 @@
 ---
 layout: default
 title: "10X Developer Unicorn - Claude Code Plugin"
-description: "Transform Claude Code into a coordinated engineering team. 18 skills across 6 agents encode the hidden 80% of software engineering expertise."
+description: "Transform Claude Code into a coordinated engineering team. 5 agents and 13 composable skills encode the hidden 80% of software engineering expertise."
 hero: true
 hero_title: "10X Developer Unicorn"
-hero_tagline: "A Claude Code plugin that transforms your AI assistant into a coordinated engineering team. 18 skills. 6 agents. The hidden 80% of software engineering -- encoded."
+hero_tagline: "A Claude Code plugin that transforms your AI assistant into a coordinated engineering team. 5 agents. 13 skills. The hidden 80% of software engineering -- encoded."
 hero_actions:
   - label: "Get Started"
     url: "/unicorn-team/getting-started/"
@@ -13,12 +13,12 @@ hero_actions:
     url: "https://github.com/aj-geddes/unicorn-team"
     style: "btn-secondary"
 hero_stats:
-  - number: "18"
-    label: "Skills"
-    color: "var(--mauve)"
-  - number: "6"
+  - number: "5"
     label: "Agents"
     color: "var(--blue)"
+  - number: "13"
+    label: "Skills"
+    color: "var(--mauve)"
   - number: "94"
     label: "Tests Passing"
     color: "var(--green)"
@@ -32,7 +32,7 @@ permalink: /
 
 Most AI coding tools help with the **visible 20%** of software engineering: writing code. But professional developers spend 80% of their time on everything *around* the code -- reading existing systems, recognizing patterns, estimating effort, reviewing their own work, managing technical debt, thinking about security.
 
-**10X Developer Unicorn** is a Claude Code plugin that encodes that hidden 80%. It transforms Claude Code from a single AI assistant into a **coordinated team of 6 specialized agents** with 18 skills that mirror how senior engineers actually work.
+**10X Developer Unicorn** is a Claude Code plugin that encodes that hidden 80%. It transforms Claude Code from a single AI assistant into a **coordinated team of 5 specialized agents** with 13 composable skills that mirror how senior engineers actually work.
 
 The result: Claude Code that doesn't just write code -- it reads codebases strategically, enforces TDD discipline, self-reviews before committing, estimates with risk buffers, and manages technical debt deliberately.
 
@@ -75,22 +75,29 @@ The orchestrator analyzes every task and routes it to the right specialist. Each
 
 ---
 
-## The 18 Skills
+## Agents + Skills
 
-### Agent Skills
+### 5 Specialized Agents
 
-These are the specialized agents that execute work. Each runs in its own context window with domain-specific expertise.
+Each agent runs in its own 200K context window with protocol content inlined directly -- no duplicate slash commands.
+
+| Agent | What It Does |
+|-------|-------------|
+| **architect** | System design, ADRs, API contracts, tradeoff analysis |
+| **developer** | TDD-first implementation across Python, JS/TS, Go, Rust |
+| **qa-security** | Code review, security audits, OWASP analysis, quality gates |
+| **devops** | CI/CD pipelines, Kubernetes, Terraform, deployment strategies |
+| **polyglot** | Rapid language acquisition, cross-ecosystem migration |
+
+### 13 Composable Skills
+
+#### Coordination
 
 | Skill | What It Does |
 |-------|-------------|
 | **orchestrator** | Routes tasks, coordinates agents, enforces quality gates |
-| **architect** | System design, ADRs, API contracts, tradeoff analysis |
-| **developer** | TDD-first implementation across Python, JS/TS, Go, Rust |
-| **qa-security** | Code review, security audits, OWASP analysis, quality gates |
-| **agent-devops** | CI/CD pipelines, Kubernetes, Terraform, deployment strategies |
-| **polyglot** | Rapid language acquisition, cross-ecosystem migration |
 
-### Meta Skills
+#### Meta Skills
 
 These encode the "hidden 80%" -- the engineering judgment skills that separate senior developers from code generators.
 
@@ -149,6 +156,6 @@ Then ask Claude Code to build something. The orchestrator takes it from there.
 
 [Getting Started Guide]({{ site.baseurl }}/getting-started/) -- walkthrough your first task with detailed examples.
 
-[Skills Deep Dive]({{ site.baseurl }}/skills/) -- explore all 18 skills and how they compose.
+[Skills Deep Dive]({{ site.baseurl }}/skills/) -- explore all 13 skills and how they compose.
 
 [Architecture]({{ site.baseurl }}/architecture/) -- understand the orchestrator-first design.

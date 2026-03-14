@@ -4,7 +4,7 @@ Validation tests for the Claude Code plugin manifest.
 Tests ensure:
 - .claude-plugin/plugin.json exists and is valid
 - Required fields are present
-- All 18 skills are discoverable at the expected flat paths
+- All 13 composable skills are discoverable at the expected flat paths
 """
 
 import json
@@ -78,12 +78,15 @@ def test_plugin_has_required_fields():
         )
 
 
-def test_all_18_skills_discoverable():
-    """All 18 skills must be discoverable at skills/*/SKILL.md."""
+def test_all_13_skills_discoverable():
+    """All 13 composable skills must be discoverable at skills/*/SKILL.md.
+
+    Agent protocol content is inlined in .claude/agents/*.md, not in skills/.
+    """
     skill_files = sorted(SKILLS_DIR.glob("*/SKILL.md"))
 
-    assert len(skill_files) == 18, (
-        f"Expected 18 skills at skills/*/SKILL.md, found {len(skill_files)}: "
+    assert len(skill_files) == 13, (
+        f"Expected 13 skills at skills/*/SKILL.md, found {len(skill_files)}: "
         f"{[f.parent.name for f in skill_files]}"
     )
 

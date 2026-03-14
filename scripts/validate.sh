@@ -30,10 +30,10 @@ else
     ERRORS=$((ERRORS + 1))
 fi
 
-# 2. Count skills
-echo -n "  Skills count (expect 18)... "
+# 2. Count skills (13 composable skills; 5 agent protocols are inlined in .claude/agents/)
+echo -n "  Skills count (expect 13)... "
 SKILL_COUNT=$(find "$PROJECT_ROOT/skills" -maxdepth 2 -name "SKILL.md" | wc -l)
-if [ "$SKILL_COUNT" -eq 18 ]; then
+if [ "$SKILL_COUNT" -eq 13 ]; then
     echo -e "${GREEN}✓${NC} ($SKILL_COUNT)"
 else
     echo -e "${RED}✗${NC} (found $SKILL_COUNT)"

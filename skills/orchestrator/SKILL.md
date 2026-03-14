@@ -51,13 +51,13 @@ Agents are defined in `.claude/agents/` and spawned via the Agent tool. Each
 gets a fresh 200K context window. The orchestrator is a skill (main context
 coordinator), not an agent.
 
-| Agent Definition | Model | Preloaded Skills | When to Invoke |
-|-----------------|-------|-----------------|----------------|
-| `.claude/agents/developer.md` | sonnet | developer, self-verification, testing, python, javascript | Code implementation, bug fixes, refactoring |
-| `.claude/agents/architect.md` | opus | architect, pattern-transfer, code-reading, technical-debt | System design, ADRs, API contracts, tradeoff analysis |
-| `.claude/agents/qa-security.md` | sonnet | qa-security, security, testing | Code review, security audits, quality gates |
-| `.claude/agents/devops.md` | sonnet | agent-devops, domain-devops, security | CI/CD, IaC, deployment, monitoring |
-| `.claude/agents/polyglot.md` | opus | polyglot, language-learning, pattern-transfer, code-reading | New languages, cross-ecosystem patterns |
+| Agent Definition | Model | Composable Skills | When to Invoke |
+|-----------------|-------|-------------------|----------------|
+| `.claude/agents/developer.md` | sonnet | self-verification, testing, python, javascript | Code implementation, bug fixes, refactoring |
+| `.claude/agents/architect.md` | opus | pattern-transfer, code-reading, technical-debt | System design, ADRs, API contracts, tradeoff analysis |
+| `.claude/agents/qa-security.md` | sonnet | security, testing | Code review, security audits, quality gates |
+| `.claude/agents/devops.md` | sonnet | domain-devops, security | CI/CD, IaC, deployment, monitoring |
+| `.claude/agents/polyglot.md` | opus | language-learning, pattern-transfer, code-reading | New languages, cross-ecosystem patterns |
 
 ## Delegation via Agent Tool
 

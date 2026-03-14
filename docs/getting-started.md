@@ -156,13 +156,14 @@ unicorn-team/
       devops.md           # Infrastructure and deployment agent (sonnet)
       polyglot.md         # Language specialist agent (opus)
     skills/               # Symlinks to skills/ for discovery
+  protocols/            # Agent reference materials
+      developer/references/
+      architect/references/
+      qa-security/references/
+      devops/references/
+      polyglot/references/
   skills/
     orchestrator/         # Task routing and coordination (skill, not agent)
-    architect/            # Architect agent protocol skill
-    developer/            # Developer agent protocol skill
-    qa-security/          # QA-Security agent protocol skill
-    agent-devops/         # DevOps agent protocol skill
-    polyglot/             # Polyglot agent protocol skill
     code-reading/         # Codebase comprehension
     pattern-transfer/     # Cross-domain pattern recognition
     self-verification/    # Pre-commit self-review

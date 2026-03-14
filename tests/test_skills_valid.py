@@ -153,41 +153,19 @@ def test_at_least_one_skill_exists():
         )
 
 
-# Agent protocol skills should NOT have trigger phrases -- they are
-# preloaded by agent definitions, not triggered directly by users.
-AGENT_PROTOCOL_SKILLS = {
-    "developer", "architect", "qa-security", "agent-devops", "polyglot"
-}
+def test_no_agent_protocol_skills_in_skills_dir():
+    """Agent protocols belong in .claude/agents/, not in skills/.
 
-
-def _find_agent_protocol_skills():
-    """Find SKILL.md files for agent protocol skills."""
-    results = []
-    for name in sorted(AGENT_PROTOCOL_SKILLS):
-        skill_file = SKILLS_DIR / name / "SKILL.md"
-        if skill_file.exists():
-            results.append(skill_file)
-    return results
-
-
-@pytest.mark.parametrize("skill_file", _find_agent_protocol_skills(),
-                         ids=lambda f: f.parent.name)
-def test_agent_skills_are_detriggered(skill_file):
-    """Agent protocol skills must NOT have 'ALWAYS trigger on' in descriptions.
-
-    These skills are preloaded by agent definitions (.claude/agents/*.md)
-    and should not be triggered directly as standalone skills.
+    Protocol content is inlined into agent definitions to avoid
+    registering them as user-facing slash commands.
     """
-    frontmatter, _ = parse_skill_frontmatter(skill_file)
+    agent_protocol_names = {
+        "developer", "architect", "qa-security", "agent-devops", "polyglot"
+    }
 
-    if frontmatter is None or "description" not in frontmatter:
-        pytest.skip("Frontmatter validation failed")
-
-    description = frontmatter["description"]
-
-    assert "ALWAYS trigger on" not in description, (
-        f"{skill_file.relative_to(PROJECT_ROOT)} is an agent protocol skill "
-        f"and must NOT have 'ALWAYS trigger on' in its description. "
-        f"Agent protocol skills are preloaded by agent definitions, "
-        f"not triggered directly."
-    )
+    for name in agent_protocol_names:
+        skill_dir = SKILLS_DIR / name
+        assert not skill_dir.exists(), (
+            f"skills/{name}/ should not exist. Agent protocol content "
+            f"belongs in .claude/agents/{name}.md, not as a standalone skill."
+        )

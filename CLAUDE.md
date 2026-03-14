@@ -1,24 +1,29 @@
 # 10X Developer Unicorn
 
-Agent orchestration system for Claude Code. 5 agents + 18 skills, dual-layer
+Agent orchestration system for Claude Code. 5 agents + 13 skills, dual-layer
 architecture where agents spawn as subprocesses with fresh 200K context windows.
 
 ## Architecture: Agents + Skills
 
 **Agents** (`.claude/agents/*.md`) are subprocess definitions spawned via the
-Agent tool. Each gets a fresh 200K context window with preloaded skills.
+Agent tool. Each gets a fresh 200K context window. Agent protocol content is
+inlined directly in the agent definition body to avoid registering as
+user-facing slash commands.
 
-**Skills** (`skills/*/SKILL.md`) are protocol documents. Agent protocol skills
-are preloaded into agents. Composable skills (meta + domain) provide shared
-knowledge.
+**Skills** (`skills/*/SKILL.md`) are composable protocol documents (meta +
+domain) that provide shared knowledge. All skills in `skills/` are
+user-invocable.
 
-| Agent | Model | Preloaded Skills |
-|-------|-------|-----------------|
-| developer | sonnet | developer, self-verification, testing, python, javascript |
-| architect | opus | architect, pattern-transfer, code-reading, technical-debt |
-| qa-security | sonnet | qa-security, security, testing |
-| devops | sonnet | agent-devops, domain-devops, security |
-| polyglot | opus | polyglot, language-learning, pattern-transfer, code-reading |
+**Protocols** (`.claude/protocols/`) contain reference materials and scripts
+used by agents (not registered as skills).
+
+| Agent | Model | Composable Skills |
+|-------|-------|-------------------|
+| developer | sonnet | self-verification, testing, python, javascript |
+| architect | opus | pattern-transfer, code-reading, technical-debt |
+| qa-security | sonnet | security, testing |
+| devops | sonnet | domain-devops, security |
+| polyglot | opus | language-learning, pattern-transfer, code-reading |
 
 The orchestrator is a **skill** (not an agent) that runs in the main context
 and coordinates delegation to agents.
@@ -101,7 +106,7 @@ Scope: orchestrator, developer, qa, devops, hooks, etc.
 ## Commands
 
 ```bash
-skills/developer/scripts/tdd.sh <feature>                     # TDD workflow
+.claude/protocols/developer/scripts/tdd.sh <feature>          # TDD workflow
 skills/self-verification/scripts/self-review.sh               # Pre-commit checklist
 skills/estimation/scripts/estimate.sh                         # PERT estimation
 skills/language-learning/scripts/new-language.sh <lang>       # Language learning
@@ -124,7 +129,7 @@ Complex multi-domain   -> Parallel agent delegation
 ## Architecture Reference
 
 - `docs/architecture.md` - Agent specs, workflows, delegation design
-- `docs/skills.md` - All 18 skills, composition, and creation guide
+- `docs/skills.md` - All 13 skills, composition, and creation guide
 - `docs/getting-started.md` - Installation and first task walkthrough
 
 ## Repository

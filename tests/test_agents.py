@@ -7,6 +7,7 @@ Tests ensure:
 - Model values are valid (sonnet/opus/haiku)
 - Skill references resolve to existing skills/ directories
 - Agent names match the expected set
+- Protocol reference files exist in .claude/protocols/
 """
 
 import re
@@ -19,6 +20,7 @@ import yaml
 PROJECT_ROOT = Path(__file__).parent.parent
 AGENTS_DIR = PROJECT_ROOT / ".claude" / "agents"
 SKILLS_DIR = PROJECT_ROOT / "skills"
+PROTOCOLS_DIR = PROJECT_ROOT / ".claude" / "protocols"
 
 EXPECTED_AGENTS = {"developer", "architect", "qa-security", "devops", "polyglot"}
 VALID_MODELS = {"sonnet", "opus", "haiku"}
@@ -156,3 +158,37 @@ def test_agent_skills_resolve(agent_file):
             f"{agent_file.name} references skill '{skill_name}' "
             f"but {skill_file.relative_to(PROJECT_ROOT)} does not exist"
         )
+
+
+@pytest.mark.parametrize("agent_file", find_agent_files(),
+                         ids=lambda f: f.stem)
+def test_agent_has_no_self_referencing_protocol_skill(agent_file):
+    """Agents must not reference their own name as a skill.
+
+    Protocol content is inlined into the agent definition body,
+    not loaded as a separate skill from skills/.
+    """
+    frontmatter, _ = parse_agent_frontmatter(agent_file)
+
+    if frontmatter is None or "skills" not in frontmatter:
+        pytest.skip("Frontmatter or skills field missing")
+
+    agent_name = frontmatter.get("name", agent_file.stem)
+    skills = frontmatter["skills"]
+
+    # Also check for the agent-devops -> devops mapping
+    protocol_skill_names = {agent_name, f"agent-{agent_name}"}
+
+    for skill_name in skills:
+        assert skill_name not in protocol_skill_names, (
+            f"{agent_file.name} should not reference '{skill_name}' as a skill. "
+            f"Protocol content should be inlined in the agent definition body."
+        )
+
+
+def test_protocols_directory_exists():
+    """The .claude/protocols directory must exist for agent reference files."""
+    assert PROTOCOLS_DIR.exists(), (
+        f".claude/protocols directory not found at {PROTOCOLS_DIR}. "
+        f"Agent reference materials should be stored here."
+    )

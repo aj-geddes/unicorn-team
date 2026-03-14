@@ -1,9 +1,9 @@
 # 10X Developer Unicorn
 
-> A Claude Code plugin that encodes the "hidden 80%" of software engineering expertise into 18 skills across 6 specialized agents.
+> A Claude Code plugin that encodes the "hidden 80%" of software engineering expertise into 5 specialized agents and 13 composable skills.
 
 [![Tests](https://img.shields.io/badge/tests-94%20passed-brightgreen.svg)]()
-[![Skills](https://img.shields.io/badge/skills-18-blue.svg)]()
+[![Skills](https://img.shields.io/badge/skills-13-blue.svg)]()
 [![Plugin](https://img.shields.io/badge/Claude%20Code-plugin-blueviolet.svg)](https://claude.ai)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 
@@ -23,7 +23,7 @@ claude plugin marketplace add aj-geddes/unicorn-team
 claude plugin install unicorn-team@unicorn-team
 ```
 
-Done. Claude Code discovers all 18 skills, registers event hooks, and activates the orchestrator.
+Done. Claude Code discovers all 13 skills, registers event hooks, and activates the orchestrator.
 
 ## How It Works
 
@@ -83,20 +83,29 @@ flowchart LR
     style V fill:#cba6f7,stroke:#cba6f7,color:#1e1e2e
 ```
 
-## The 18 Skills
+## The Skills
 
-### Agents
+### Agents (Protocol Inlined)
+
+5 specialized agents with protocols inlined in their definitions (`.claude/agents/*.md`), keeping them off the slash command list:
+
+| Agent | What It Does |
+|-------|-------------|
+| **architect** | System design, ADRs, API contracts, tradeoff analysis |
+| **developer** | TDD-first implementation across Python, JS/TS, Go, Rust |
+| **qa-security** | 4-layer code review, STRIDE threat modeling |
+| **devops** | CI/CD pipelines, deployment strategies, runbooks |
+| **polyglot** | Rapid language acquisition, cross-ecosystem pattern transfer |
+
+### 13 Composable Skills
+
+#### Coordination
 
 | Skill | What It Does |
 |-------|-------------|
 | **orchestrator** | Routes tasks, delegates to agents, enforces quality gates |
-| **architect** | System design, ADRs, API contracts, tradeoff analysis |
-| **developer** | TDD-first implementation across Python, JS/TS, Go, Rust |
-| **qa-security** | 4-layer code review, STRIDE threat modeling |
-| **agent-devops** | CI/CD pipelines, deployment strategies, runbooks |
-| **polyglot** | Rapid language acquisition, cross-ecosystem pattern transfer |
 
-### Meta Skills -- The Hidden 80%
+#### Meta Skills -- The Hidden 80%
 
 | Skill | What It Does |
 |-------|-------------|
@@ -128,14 +137,21 @@ unicorn-team/
 │   └── marketplace.json              # Marketplace manifest
 ├── settings.json                     # Plugin settings
 ├── CLAUDE.md                         # Orchestrator activation
-├── skills/                           # 18 skills, flat layout
+├── .claude/
+│   ├── agents/                      # 5 agent definitions (protocol inlined)
+│   │   ├── developer.md
+│   │   ├── architect.md
+│   │   ├── qa-security.md
+│   │   ├── devops.md
+│   │   └── polyglot.md
+│   └── protocols/                   # Agent reference materials
+│       ├── developer/references/
+│       ├── architect/references/
+│       └── ...
+├── skills/                          # 13 composable skills
 │   ├── orchestrator/
 │   │   ├── SKILL.md
 │   │   └── references/
-│   ├── developer/
-│   │   ├── SKILL.md
-│   │   ├── references/
-│   │   └── scripts/tdd.sh
 │   ├── self-verification/
 │   │   ├── SKILL.md
 │   │   ├── references/
@@ -144,7 +160,7 @@ unicorn-team/
 │   │   ├── SKILL.md
 │   │   ├── references/
 │   │   └── scripts/estimate.sh
-│   └── ... (14 more)
+│   └── ... (10 more)
 ├── hooks/hooks.json                  # Claude Code event hooks
 ├── scripts/
 │   ├── validate.sh                   # Plugin structure validator
@@ -201,8 +217,8 @@ pytest tests/test_hooks.py          # hooks.json validation
 
 | | Count |
 |-|-------|
-| Skills | 18 |
-| Agents | 6 |
+| Composable Skills | 13 |
+| Agents | 5 |
 | Reference docs | 58 |
 | Scripts | 7 |
 | Tests | 94 |

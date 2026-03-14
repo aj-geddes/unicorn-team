@@ -1,13 +1,13 @@
 ---
 layout: default
 title: "Skills - 10X Developer Unicorn"
-description: "Deep dive into the 18 skills that encode senior engineering expertise: code reading, pattern transfer, estimation, self-verification, and more."
+description: "Deep dive into the 13 composable skills that encode senior engineering expertise: code reading, pattern transfer, estimation, self-verification, and more."
 permalink: /skills/
 ---
 
 # Skills
 
-The 10X Developer Unicorn plugin is built on a skill system. Each skill is a `SKILL.md` file with YAML frontmatter that tells Claude Code *when* to activate it and *how* to use it. Skills can have co-located `scripts/` for automation and `references/` for detailed documentation.
+The 10X Developer Unicorn plugin has 13 composable skills in `skills/` -- all user-invocable via slash commands. Agent protocol content (TDD workflows, review checklists, deployment procedures) is inlined directly in agent definitions (`.claude/agents/*.md`), keeping the skill list clean and unambiguous.
 
 ```
 skills/
@@ -26,13 +26,8 @@ Skills compose. The developer agent draws on `python`, `testing`, and `security`
 <div class="diagram">
   <div class="skill-map">
     <div class="skill-group" style="border-color: var(--blue);">
-      <div class="skill-group-title text-blue">Agent Protocol Skills</div>
+      <div class="skill-group-title text-blue">Coordination</div>
       <span class="skill-tag bg-blue">orchestrator</span>
-      <span class="skill-tag bg-mauve">architect</span>
-      <span class="skill-tag bg-green">developer</span>
-      <span class="skill-tag bg-peach">qa-security</span>
-      <span class="skill-tag bg-teal">agent-devops</span>
-      <span class="skill-tag bg-yellow">polyglot</span>
     </div>
     <div class="skill-group" style="border-color: var(--mauve);">
       <div class="skill-group-title text-mauve">Meta Skills</div>
@@ -57,19 +52,21 @@ Skills compose. The developer agent draws on `python`, `testing`, and `security`
 
 ---
 
-## Agent Protocol Skills
+## Agents (Protocol Inlined)
 
-Agent protocol skills define the detailed protocols preloaded by agent definitions in `.claude/agents/`. Each agent spawns as a subprocess via the Agent tool with its own 200K context window. These skills are not triggered directly -- they are loaded into agents via the `skills` frontmatter field.
+Each agent in `.claude/agents/` has its protocol content inlined directly in its definition body. This keeps agent protocols out of the slash command list while making them self-contained. Agent reference materials live in `.claude/protocols/{agent}/references/`.
 
-| Agent Definition | Preloaded Skills |
-|-----------------|-----------------|
-| `.claude/agents/developer.md` | developer, self-verification, testing, python, javascript |
-| `.claude/agents/architect.md` | architect, pattern-transfer, code-reading, technical-debt |
-| `.claude/agents/qa-security.md` | qa-security, security, testing |
-| `.claude/agents/devops.md` | agent-devops, domain-devops, security |
-| `.claude/agents/polyglot.md` | polyglot, language-learning, pattern-transfer, code-reading |
+| Agent Definition | Composable Skills | Role |
+|-----------------|-------------------|------|
+| `.claude/agents/developer.md` | self-verification, testing, python, javascript | TDD implementation (Python, JS/TS, Go, Rust) |
+| `.claude/agents/architect.md` | pattern-transfer, code-reading, technical-debt | System design, ADRs, API contracts |
+| `.claude/agents/qa-security.md` | security, testing | 4-layer code review, STRIDE security audit |
+| `.claude/agents/devops.md` | domain-devops, security | CI/CD, IaC, deployment, monitoring |
+| `.claude/agents/polyglot.md` | language-learning, pattern-transfer, code-reading | Language acquisition, pattern transfer |
 
-### Orchestrator
+---
+
+## Orchestrator
 
 **Triggers**: "implement", "build", "create", "design system", "deploy", "refactor", "fix bug", "estimate", "architecture"
 
@@ -79,36 +76,6 @@ The brain of the system. Analyzes incoming tasks, routes them to the right agent
 - Breaks multi-domain tasks into parallel delegations
 - Enforces TDD and self-verification on every implementation
 - Manages context budgets across subagents
-
-### Architect
-
-**Triggers**: "design a system", "architecture review", "how do we scale", "write an ADR", "API contract", "data model", "tradeoff analysis"
-
-Produces design artifacts, not code. Creates Architecture Decision Records, API contracts, data models, and Mermaid diagrams. Evaluates patterns and documents tradeoffs so the Developer agent has clear guidance.
-
-### Developer
-
-**Triggers**: "implement", "build", "code", "write code", "fix bug", "debug", "refactor", "TDD"
-
-The workhorse. Handles all code implementation with strict TDD discipline: RED (failing test), GREEN (make it pass), REFACTOR (improve), VERIFY (self-review). Supports Python, JavaScript/TypeScript, Go, and Rust. Delegates to domain skills for language-specific idioms.
-
-### QA-Security
-
-**Triggers**: "review", "code review", "security review", "audit", "vulnerability", "threat model", "OWASP"
-
-The final quality gate. Reviews code before merge, runs security analysis (STRIDE, OWASP), checks test coverage, and provides structured approval/rejection with findings. Acts as the team's harshest critic -- in a constructive way.
-
-### DevOps (Agent)
-
-**Triggers**: "deploy", "CI/CD", "pipeline", "Docker", "Kubernetes", "Terraform", "monitoring", "observability"
-
-Makes code run reliably in production. Creates CI/CD pipelines, writes Infrastructure-as-Code, configures Kubernetes deployments, sets up monitoring and observability. Handles blue-green and canary deployment strategies.
-
-### Polyglot
-
-**Triggers**: "new language", "learn language", "translate pattern", "port from X to Y", "migrate to", "unfamiliar language"
-
-The language specialist. Rapidly acquires new languages and frameworks through a structured protocol, then hands off knowledge to the Developer agent. Identifies paradigm similarities, finds canonical examples, and creates quick references.
 
 ---
 
@@ -200,14 +167,14 @@ Infrastructure patterns and practices: Dockerfile optimization, CI/CD pipeline d
 
 Skills don't work in isolation. When the Developer agent implements a Python feature:
 
-1. **developer** skill provides the TDD protocol and implementation workflow
+1. The agent's **inlined protocol** provides the TDD workflow and implementation discipline
 2. **python** skill provides language-specific idioms, tooling, and project structure
 3. **testing** skill provides test strategy and pattern guidance
 4. **security** skill flags potential vulnerabilities during implementation
 5. **self-verification** skill runs the pre-commit checklist before finishing
 6. **code-reading** skill activates if the developer needs to understand existing code first
 
-The orchestrator decides which skills each agent needs and loads them into its context window.
+The orchestrator decides which agent to invoke. Each agent's composable skills are loaded into its 200K context window alongside its inlined protocol.
 
 ---
 

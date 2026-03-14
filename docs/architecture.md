@@ -1,7 +1,7 @@
 ---
 layout: default
 title: "Architecture - 10X Developer Unicorn"
-description: "How the orchestrator coordinates 6 specialized agents with context-efficient delegation, quality gates, and TDD enforcement."
+description: "How the orchestrator coordinates 5 specialized agents with context-efficient delegation, quality gates, and TDD enforcement."
 permalink: /architecture/
 ---
 
@@ -50,17 +50,17 @@ The 10X Developer Unicorn uses an **orchestrator-first design**: a lightweight c
 
 ### Agent Definitions
 
-Each agent is defined as a `.md` file in `.claude/agents/` with frontmatter specifying model, tools, and preloaded skills:
+Each agent is defined as a `.md` file in `.claude/agents/` with frontmatter specifying model, tools, and composable skills. Agent protocol content (TDD workflow, review checklists, deployment procedures, etc.) is inlined directly in the agent definition body rather than loaded as separate skills, so only user-invocable skills appear as slash commands.
 
-| Agent | Model | Preloaded Skills |
-|-------|-------|-----------------|
-| developer | sonnet | developer, self-verification, testing, python, javascript |
-| architect | opus | architect, pattern-transfer, code-reading, technical-debt |
-| qa-security | sonnet | qa-security, security, testing |
-| devops | sonnet | agent-devops, domain-devops, security |
-| polyglot | opus | polyglot, language-learning, pattern-transfer, code-reading |
+| Agent | Model | Composable Skills |
+|-------|-------|-------------------|
+| developer | sonnet | self-verification, testing, python, javascript |
+| architect | opus | pattern-transfer, code-reading, technical-debt |
+| qa-security | sonnet | security, testing |
+| devops | sonnet | domain-devops, security |
+| polyglot | opus | language-learning, pattern-transfer, code-reading |
 
-Agent protocol skills (developer, architect, qa-security, agent-devops, polyglot) contain the detailed protocols but are not triggered directly -- they are preloaded into their respective agents via the `skills` frontmatter field.
+Agent reference materials (detailed examples, templates, runbooks) are stored in `.claude/protocols/{agent}/references/` and accessed on-demand via the Read tool.
 
 ---
 
@@ -148,7 +148,7 @@ Context windows are the scarcest resource in an AI system. The unicorn architect
 |-------------|--------|
 | System prompt | ~5K |
 | Conversation history | ~10K |
-| Skill metadata (all 18) | ~2K |
+| Skill metadata (all 13) | ~2K |
 | Active skill body | ~5K |
 | Working memory | ~10K |
 | Response buffer | ~5K |
