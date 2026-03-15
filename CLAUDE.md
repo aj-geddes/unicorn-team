@@ -5,10 +5,11 @@ architecture where agents spawn as subprocesses with fresh 200K context windows.
 
 ## Architecture: Agents + Skills
 
-**Agents** (`.claude/agents/*.md`) are subprocess definitions spawned via the
-Agent tool. Each gets a fresh 200K context window. Agent protocol content is
-inlined directly in the agent definition body to avoid registering as
-user-facing slash commands.
+**Agents** (`agents/*.md`) are subprocess definitions spawned via the Agent
+tool. Each gets a fresh 200K context window. Agent protocol content is inlined
+directly in the agent definition body to avoid registering as user-facing slash
+commands. Agents live at the plugin root (`agents/`) so the plugin system
+registers them; `.claude/agents` is a symlink for local dev compatibility.
 
 **Skills** (`skills/*/SKILL.md`) are composable protocol documents (meta +
 domain) that provide shared knowledge. All skills in `skills/` are
@@ -118,11 +119,11 @@ pytest tests/ -v                                              # Run all tests
 
 ```
 Simple question        -> Answer directly
-Implementation         -> Developer agent  (.claude/agents/developer.md)
-Architecture decision  -> Architect agent  (.claude/agents/architect.md)
-Code review            -> QA agent         (.claude/agents/qa-security.md)
-Deployment             -> DevOps agent     (.claude/agents/devops.md)
-New language           -> Polyglot agent   (.claude/agents/polyglot.md)
+Implementation         -> Developer agent  (agents/developer.md)
+Architecture decision  -> Architect agent  (agents/architect.md)
+Code review            -> QA agent         (agents/qa-security.md)
+Deployment             -> DevOps agent     (agents/devops.md)
+New language           -> Polyglot agent   (agents/polyglot.md)
 Complex multi-domain   -> Parallel agent delegation
 ```
 

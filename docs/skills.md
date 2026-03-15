@@ -7,7 +7,7 @@ permalink: /skills/
 
 # Skills
 
-The 10X Developer Unicorn plugin has 13 composable skills in `skills/` -- all user-invocable via slash commands. Agent protocol content (TDD workflows, review checklists, deployment procedures) is inlined directly in agent definitions (`.claude/agents/*.md`), keeping the skill list clean and unambiguous.
+The 10X Developer Unicorn plugin has 13 composable skills in `skills/` -- all user-invocable via slash commands. Agent protocol content (TDD workflows, review checklists, deployment procedures) is inlined directly in agent definitions (`agents/*.md`), keeping the skill list clean and unambiguous.
 
 ```
 skills/
@@ -54,15 +54,15 @@ Skills compose. The developer agent draws on `python`, `testing`, and `security`
 
 ## Agents (Protocol Inlined)
 
-Each agent in `.claude/agents/` has its protocol content inlined directly in its definition body. This keeps agent protocols out of the slash command list while making them self-contained. Agent reference materials live in `.claude/protocols/{agent}/references/`.
+Each agent in `agents/` has its protocol content inlined directly in its definition body. This keeps agent protocols out of the slash command list while making them self-contained. Agent reference materials live in `.claude/protocols/{agent}/references/`.
 
 | Agent Definition | Composable Skills | Role |
 |-----------------|-------------------|------|
-| `.claude/agents/developer.md` | self-verification, testing, python, javascript | TDD implementation (Python, JS/TS, Go, Rust) |
-| `.claude/agents/architect.md` | pattern-transfer, code-reading, technical-debt | System design, ADRs, API contracts |
-| `.claude/agents/qa-security.md` | security, testing | 4-layer code review, STRIDE security audit |
-| `.claude/agents/devops.md` | domain-devops, security | CI/CD, IaC, deployment, monitoring |
-| `.claude/agents/polyglot.md` | language-learning, pattern-transfer, code-reading | Language acquisition, pattern transfer |
+| `agents/developer.md` | self-verification, testing, python, javascript | TDD implementation (Python, JS/TS, Go, Rust) |
+| `agents/architect.md` | pattern-transfer, code-reading, technical-debt | System design, ADRs, API contracts |
+| `agents/qa-security.md` | security, testing | 4-layer code review, STRIDE security audit |
+| `agents/devops.md` | domain-devops, security | CI/CD, IaC, deployment, monitoring |
+| `agents/polyglot.md` | language-learning, pattern-transfer, code-reading | Language acquisition, pattern transfer |
 
 ---
 

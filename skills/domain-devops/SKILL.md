@@ -8,7 +8,7 @@ description: >-
   "pipeline", "container", "k8s", "GitOps", "Dockerfile", "health check",
   "troubleshoot deployment". Use when containerizing applications, building
   pipelines, deploying services, setting up monitoring, or debugging
-  infrastructure issues. Different from the DevOps agent (.claude/agents/devops.md)
+  infrastructure issues. Different from the DevOps agent (agents/devops.md)
   which handles orchestration and runbook execution rather than pattern guidance.
 ---
 

@@ -1,8 +1,8 @@
 """
-Validation tests for agent definitions in .claude/agents/.
+Validation tests for agent definitions in agents/.
 
 Tests ensure:
-- .claude/agents/ directory exists with 5 agent definitions
+- agents/ directory exists with 5 agent definitions
 - Each agent .md has valid frontmatter (name, description, model, tools, skills)
 - Model values are valid (sonnet/opus/haiku)
 - Skill references resolve to existing skills/ directories
@@ -18,7 +18,7 @@ import yaml
 
 
 PROJECT_ROOT = Path(__file__).parent.parent
-AGENTS_DIR = PROJECT_ROOT / ".claude" / "agents"
+AGENTS_DIR = PROJECT_ROOT / "agents"
 SKILLS_DIR = PROJECT_ROOT / "skills"
 PROTOCOLS_DIR = PROJECT_ROOT / ".claude" / "protocols"
 
@@ -60,9 +60,9 @@ def parse_agent_frontmatter(agent_file):
 
 
 def test_agents_directory_exists():
-    """The .claude/agents directory must exist."""
+    """The agents/ directory must exist at the plugin root."""
     assert AGENTS_DIR.exists(), (
-        f".claude/agents directory not found at {AGENTS_DIR}"
+        f"agents/ directory not found at {AGENTS_DIR}"
     )
 
 
@@ -72,7 +72,7 @@ def test_exactly_5_agents():
     agent_names = [f.stem for f in agent_files]
 
     assert len(agent_files) == 5, (
-        f"Expected 5 agent definitions in .claude/agents/, "
+        f"Expected 5 agent definitions in agents/, "
         f"found {len(agent_files)}: {agent_names}"
     )
 

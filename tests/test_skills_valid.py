@@ -154,7 +154,7 @@ def test_at_least_one_skill_exists():
 
 
 def test_no_agent_protocol_skills_in_skills_dir():
-    """Agent protocols belong in .claude/agents/, not in skills/.
+    """Agent protocols belong in agents/, not in skills/.
 
     Protocol content is inlined into agent definitions to avoid
     registering them as user-facing slash commands.
@@ -167,5 +167,5 @@ def test_no_agent_protocol_skills_in_skills_dir():
         skill_dir = SKILLS_DIR / name
         assert not skill_dir.exists(), (
             f"skills/{name}/ should not exist. Agent protocol content "
-            f"belongs in .claude/agents/{name}.md, not as a standalone skill."
+            f"belongs in agents/{name}.md, not as a standalone skill."
         )

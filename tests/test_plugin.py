@@ -16,7 +16,7 @@ import pytest
 PROJECT_ROOT = Path(__file__).parent.parent
 PLUGIN_DIR = PROJECT_ROOT / ".claude-plugin"
 SKILLS_DIR = PROJECT_ROOT / "skills"
-AGENTS_DIR = PROJECT_ROOT / ".claude" / "agents"
+AGENTS_DIR = PROJECT_ROOT / "agents"
 
 REQUIRED_FIELDS = ["name", "version", "description", "author", "license"]
 
@@ -81,7 +81,7 @@ def test_plugin_has_required_fields():
 def test_all_13_skills_discoverable():
     """All 13 composable skills must be discoverable at skills/*/SKILL.md.
 
-    Agent protocol content is inlined in .claude/agents/*.md, not in skills/.
+    Agent protocol content is inlined in agents/*.md, not in skills/.
     """
     skill_files = sorted(SKILLS_DIR.glob("*/SKILL.md"))
 
@@ -105,7 +105,7 @@ def test_skills_are_flat():
 
 
 def test_agents_directory_exists():
-    """The .claude/agents directory must exist for agent definitions."""
+    """The agents/ directory must exist at the plugin root for agent definitions."""
     assert AGENTS_DIR.exists(), (
-        f".claude/agents directory not found at {AGENTS_DIR}"
+        f"agents/ directory not found at {AGENTS_DIR}"
     )

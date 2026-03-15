@@ -87,7 +87,7 @@ flowchart LR
 
 ### Agents (Protocol Inlined)
 
-5 specialized agents with protocols inlined in their definitions (`.claude/agents/*.md`), keeping them off the slash command list:
+5 specialized agents with protocols inlined in their definitions (`agents/*.md`), keeping them off the slash command list:
 
 | Agent | What It Does |
 |-------|-------------|
@@ -137,13 +137,14 @@ unicorn-team/
 │   └── marketplace.json              # Marketplace manifest
 ├── settings.json                     # Plugin settings
 ├── CLAUDE.md                         # Orchestrator activation
+├── agents/                          # 5 agent definitions at plugin root
+│   ├── developer.md
+│   ├── architect.md
+│   ├── qa-security.md
+│   ├── devops.md
+│   └── polyglot.md
 ├── .claude/
-│   ├── agents/                      # 5 agent definitions (protocol inlined)
-│   │   ├── developer.md
-│   │   ├── architect.md
-│   │   ├── qa-security.md
-│   │   ├── devops.md
-│   │   └── polyglot.md
+│   ├── agents -> ../../agents       # Symlink for local dev compatibility
 │   └── protocols/                   # Agent reference materials
 │       ├── developer/references/
 │       ├── architect/references/

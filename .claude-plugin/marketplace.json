@@ -6,7 +6,7 @@
   },
   "metadata": {
     "description": "Agent orchestration system with 5 subprocess agents and 13 composable skills encoding the hidden 80% of software engineering expertise. Agents spawn with fresh 200K context windows for true context isolation.",
-    "version": "2.0.2"
+    "version": "2.1.0"
   },
   "plugins": [
     {

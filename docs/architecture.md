@@ -7,7 +7,7 @@ permalink: /architecture/
 
 # Architecture
 
-The 10X Developer Unicorn uses an **orchestrator-first design**: a lightweight coordinator skill in the main context, backed by 5 specialized agents defined in `.claude/agents/` that spawn as subprocesses via the Agent tool. Each agent gets its own fresh 200K context window with preloaded skills, providing true context isolation.
+The 10X Developer Unicorn uses an **orchestrator-first design**: a lightweight coordinator skill in the main context, backed by 5 specialized agents defined in `agents/` that spawn as subprocesses via the Agent tool. Each agent gets its own fresh 200K context window with preloaded skills, providing true context isolation.
 
 ---
 
@@ -42,15 +42,15 @@ The 10X Developer Unicorn uses an **orchestrator-first design**: a lightweight c
 | Component | Type | Definition | Role |
 |-----------|------|------------|------|
 | **Orchestrator** | Skill | `skills/orchestrator/SKILL.md` | Routes tasks, coordinates agents, enforces quality gates |
-| **Architect** | Agent | `.claude/agents/architect.md` | System design, pattern selection, tradeoff analysis |
-| **Developer** | Agent | `.claude/agents/developer.md` | Full-stack TDD implementation (Python, JS/TS, Go, Rust) |
-| **QA-Security** | Agent | `.claude/agents/qa-security.md` | Code review, security audits, quality gate enforcement |
-| **DevOps** | Agent | `.claude/agents/devops.md` | CI/CD, infrastructure, deployment, monitoring |
-| **Polyglot** | Agent | `.claude/agents/polyglot.md` | Language acquisition, cross-ecosystem pattern transfer |
+| **Architect** | Agent | `agents/architect.md` | System design, pattern selection, tradeoff analysis |
+| **Developer** | Agent | `agents/developer.md` | Full-stack TDD implementation (Python, JS/TS, Go, Rust) |
+| **QA-Security** | Agent | `agents/qa-security.md` | Code review, security audits, quality gate enforcement |
+| **DevOps** | Agent | `agents/devops.md` | CI/CD, infrastructure, deployment, monitoring |
+| **Polyglot** | Agent | `agents/polyglot.md` | Language acquisition, cross-ecosystem pattern transfer |
 
 ### Agent Definitions
 
-Each agent is defined as a `.md` file in `.claude/agents/` with frontmatter specifying model, tools, and composable skills. Agent protocol content (TDD workflow, review checklists, deployment procedures, etc.) is inlined directly in the agent definition body rather than loaded as separate skills, so only user-invocable skills appear as slash commands.
+Each agent is defined as a `.md` file in `agents/` with frontmatter specifying model, tools, and composable skills. Agent protocol content (TDD workflow, review checklists, deployment procedures, etc.) is inlined directly in the agent definition body rather than loaded as separate skills, so only user-invocable skills appear as slash commands.
 
 | Agent | Model | Composable Skills |
 |-------|-------|-------------------|
@@ -155,7 +155,7 @@ Context windows are the scarcest resource in an AI system. The unicorn architect
 
 **Subagents get fresh context**
 
-Each agent invocation (via the Agent tool with `.claude/agents/*.md` definitions) starts with a clean 200K context window. The orchestrator passes only what's needed:
+Each agent invocation (via the Agent tool with `agents/*.md` definitions) starts with a clean 200K context window. The orchestrator passes only what's needed:
 
 - Task description (~500 tokens)
 - Relevant context (~2-3K tokens)

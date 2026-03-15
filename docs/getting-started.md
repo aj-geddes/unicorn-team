@@ -21,7 +21,7 @@ claude plugin install unicorn-team@unicorn-team
 
 ### What Happens After Install
 
-1. **Agents registered** -- 5 agent definitions in `.claude/agents/` are available for subprocess spawning via the Agent tool, each with its own 200K context window.
+1. **Agents registered** -- 5 agent definitions in `agents/` are available for subprocess spawning via the Agent tool, each with its own 200K context window.
 2. **Skills discovered** -- All 18 SKILL.md files are registered with Claude Code. Agent protocol skills are preloaded into agents; meta and domain skills provide shared knowledge.
 3. **Hooks registered** -- Pre-commit hooks are wired to enforce quality gates: tests must pass, coverage must meet threshold, no debug code, no secrets in staged files.
 4. **Orchestrator activated** -- Claude Code now routes tasks through the orchestrator decision tree, delegating to agents instead of handling everything in a single context window.
@@ -148,15 +148,15 @@ pytest tests/ -v && ./scripts/validate.sh
 
 ```
 unicorn-team/
+  agents/                 # Agent definitions at plugin root (spawn as subprocesses)
+    developer.md          # TDD implementation agent (sonnet)
+    architect.md          # System design agent (opus)
+    qa-security.md        # Code review and security agent (sonnet)
+    devops.md             # Infrastructure and deployment agent (sonnet)
+    polyglot.md           # Language specialist agent (opus)
   .claude/
-    agents/               # Agent definitions (spawn as subprocesses)
-      developer.md        # TDD implementation agent (sonnet)
-      architect.md        # System design agent (opus)
-      qa-security.md      # Code review and security agent (sonnet)
-      devops.md           # Infrastructure and deployment agent (sonnet)
-      polyglot.md         # Language specialist agent (opus)
-    skills/               # Symlinks to skills/ for discovery
-  protocols/            # Agent reference materials
+    agents -> ../../agents  # Symlink for local dev compatibility
+    protocols/            # Agent reference materials
       developer/references/
       architect/references/
       qa-security/references/
