@@ -1,7 +1,7 @@
 ---
 layout: default
-title: "Troubleshooting - 10X Developer Unicorn"
-description: "Solutions for common issues with the unicorn-team Claude Code plugin: installation, scripts, hooks, and debugging."
+title: "Troubleshooting the unicorn-team Claude Code Plugin"
+description: "Fix common issues with the unicorn-team Claude Code plugin: installation problems, hook failures, script permissions, test failures, and plugin update errors."
 permalink: /troubleshooting/
 ---
 

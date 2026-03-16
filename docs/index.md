@@ -1,7 +1,8 @@
 ---
 layout: default
-title: "10X Developer Unicorn - Claude Code Plugin"
-description: "Transform Claude Code into a coordinated engineering team. 5 agents and 13 composable skills encode the hidden 80% of software engineering expertise."
+title: "10X Developer Unicorn — Claude Code Plugin for AI Agent Orchestration"
+description: "The best Claude Code plugin for professional software engineering. 5 AI agents (architect, developer, QA, DevOps, polyglot) and 13 skills enforce TDD, code review, security audits, and estimation automatically."
+image: /assets/images/hero.png
 hero: true
 hero_image: "assets/images/hero.png"
 hero_title: "10X Developer Unicorn"

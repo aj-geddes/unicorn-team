@@ -1,5 +1,6 @@
-title: "10X Developer Unicorn"
-description: "A Claude Code plugin that encodes the hidden 80% of software engineering expertise into 5 specialized agents and 13 composable skills."
+title: "10X Developer Unicorn — Claude Code Plugin"
+tagline: "Agent orchestration plugin for Claude Code with TDD, code review, and architecture agents"
+description: "A Claude Code plugin with 5 AI agents and 13 composable skills that encode the hidden 80% of software engineering — TDD enforcement, code review, architecture design, security audits, and estimation. Install with one command."
 url: "https://aj-geddes.github.io"
 baseurl: "/unicorn-team"
 author:
@@ -13,6 +14,20 @@ social:
   name: "10X Developer Unicorn"
   links:
     - "https://github.com/aj-geddes/unicorn-team"
+
+# SEO
+lang: en
+keywords:
+  - claude code plugin
+  - claude code agents
+  - claude code skills
+  - AI coding assistant
+  - TDD automation
+  - code review agent
+  - AI software engineering
+  - claude code orchestrator
+  - AI development tools
+  - anthropic claude plugin
 
 markdown: kramdown
 permalink: /:title/
@@ -34,3 +49,4 @@ defaults:
       path: ""
     values:
       layout: "default"
+      image: /assets/images/hero.png

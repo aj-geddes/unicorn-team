@@ -1,7 +1,7 @@
 ---
 layout: default
-title: "Architecture - 10X Developer Unicorn"
-description: "How the orchestrator coordinates 5 specialized agents with context-efficient delegation, quality gates, and TDD enforcement."
+title: "Architecture — How Claude Code Agents Orchestrate Multi-Agent Pipelines"
+description: "Deep dive into how the unicorn-team Claude Code plugin coordinates 5 AI agents with 200K context windows, quality gates, TDD enforcement, and parallel delegation for professional software engineering."
 permalink: /architecture/
 ---
 

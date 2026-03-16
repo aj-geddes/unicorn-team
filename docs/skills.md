@@ -1,7 +1,7 @@
 ---
 layout: default
-title: "Skills - 10X Developer Unicorn"
-description: "Deep dive into the 13 composable skills that encode senior engineering expertise: code reading, pattern transfer, estimation, self-verification, and more."
+title: "13 Claude Code Skills — TDD, Code Review, Security, Estimation & More"
+description: "All 13 composable skills in the unicorn-team Claude Code plugin: orchestrator, code reading, pattern transfer, self-verification, estimation, technical debt, security, Python, JavaScript, testing, DevOps, and language learning."
 permalink: /skills/
 ---
 

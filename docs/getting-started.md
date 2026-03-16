@@ -1,7 +1,7 @@
 ---
 layout: default
-title: "Getting Started - 10X Developer Unicorn"
-description: "Install the unicorn-team plugin in one command and start using 18 specialized skills with Claude Code."
+title: "Install the unicorn-team Claude Code Plugin — Getting Started Guide"
+description: "How to install the unicorn-team plugin for Claude Code. Two commands to get 5 AI agents and 13 skills — TDD enforcement, code review, architecture design, security audits, and more."
 permalink: /getting-started/
 ---
 

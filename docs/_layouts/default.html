@@ -6,15 +6,20 @@
   <title>{% if page.title %}{{ page.title }} | {{ site.title }}{% else %}{{ site.title }}{% endif %}</title>
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🦄</text></svg>">
   {% seo %}
+  <meta name="keywords" content="claude code plugin, claude code agents, AI coding assistant, TDD automation, code review agent, AI software engineering, anthropic claude plugin, claude code skills, AI development tools, agent orchestration">
+  <link rel="canonical" href="{{ site.url }}{{ site.baseurl }}{{ page.url | replace: 'index.html', '' }}">
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "SoftwareApplication",
-    "name": "{{ site.title }}",
+    "name": "unicorn-team — Claude Code Plugin",
+    "alternateName": "10X Developer Unicorn",
     "description": "{{ site.description }}",
     "url": "{{ site.url }}{{ site.baseurl }}/",
     "applicationCategory": "DeveloperApplication",
-    "operatingSystem": "Cross-platform",
+    "applicationSubCategory": "AI Coding Plugin",
+    "operatingSystem": "Windows, macOS, Linux",
+    "softwareVersion": "2.1.0",
     "author": {
       "@type": "Person",
       "name": "{{ site.author.name }}",
@@ -29,9 +34,53 @@
       "@type": "WebPage",
       "url": "{{ site.url }}{{ site.baseurl }}/getting-started/"
     },
-    "codeRepository": "https://github.com/{{ site.repository }}"
+    "codeRepository": "https://github.com/{{ site.repository }}",
+    "license": "https://opensource.org/licenses/MIT",
+    "keywords": "claude code, plugin, AI agents, TDD, code review, architecture, security audit, estimation, orchestrator"
   }
   </script>
+  {% if page.url == '/' %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "What is the unicorn-team Claude Code plugin?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "unicorn-team is a Claude Code plugin that adds 5 AI agents (architect, developer, QA-security, DevOps, polyglot) and 13 composable skills to Claude Code. It encodes the hidden 80% of software engineering — TDD enforcement, code review, security audits, architecture design, estimation, and technical debt management."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "How do I install the unicorn-team plugin for Claude Code?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Run two commands: 'claude plugin marketplace add aj-geddes/unicorn-team' then 'claude plugin install unicorn-team@unicorn-team'. Skills are discovered automatically, hooks are wired, and the orchestrator activates."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "What agents does the unicorn-team plugin include?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Five specialized agents: Architect (system design, ADRs, API contracts), Developer (TDD-first implementation in Python, JS/TS, Go, Rust), QA-Security (code review, security audits, OWASP analysis), DevOps (CI/CD, Kubernetes, deployment), and Polyglot (new language acquisition, cross-ecosystem patterns). Each gets a fresh 200K context window."
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "Is the unicorn-team plugin free?",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "Yes. unicorn-team is free and open source under the MIT license. Install it from the Claude Code plugin marketplace."
+        }
+      }
+    ]
+  }
+  </script>
+  {% endif %}
   <style>
     /* ===== Reset & Base ===== */
     *, *::before, *::after {
