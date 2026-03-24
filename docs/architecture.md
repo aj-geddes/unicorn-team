@@ -54,7 +54,7 @@ Each agent is defined as a `.md` file in `agents/` with frontmatter specifying m
 
 | Agent | Model | Composable Skills |
 |-------|-------|-------------------|
-| developer | sonnet | self-verification, testing, python, javascript |
+| developer | sonnet | self-verification, testing, python, javascript, go |
 | architect | opus | pattern-transfer, code-reading, technical-debt |
 | qa-security | sonnet | security, testing |
 | devops | sonnet | domain-devops, security |

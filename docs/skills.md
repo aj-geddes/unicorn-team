@@ -7,7 +7,7 @@ permalink: /skills/
 
 # Skills
 
-The 10X Developer Unicorn plugin has 13 composable skills in `skills/` -- all user-invocable via slash commands. Agent protocol content (TDD workflows, review checklists, deployment procedures) is inlined directly in agent definitions (`agents/*.md`), keeping the skill list clean and unambiguous.
+The 10X Developer Unicorn plugin has 14 composable skills in `skills/` -- all user-invocable via slash commands. Agent protocol content (TDD workflows, review checklists, deployment procedures) is inlined directly in agent definitions (`agents/*.md`), keeping the skill list clean and unambiguous.
 
 ```
 skills/
@@ -43,6 +43,7 @@ Skills compose. The developer agent draws on `python`, `testing`, and `security`
       <div class="skill-group-title text-green">Domain Skills</div>
       <span class="skill-tag bg-green">python</span>
       <span class="skill-tag bg-green">javascript</span>
+      <span class="skill-tag bg-green">go</span>
       <span class="skill-tag bg-green">testing</span>
       <span class="skill-tag bg-green">security</span>
       <span class="skill-tag bg-green">domain-devops</span>
@@ -58,7 +59,7 @@ Each agent in `agents/` has its protocol content inlined directly in its definit
 
 | Agent Definition | Composable Skills | Role |
 |-----------------|-------------------|------|
-| `agents/developer.md` | self-verification, testing, python, javascript | TDD implementation (Python, JS/TS, Go, Rust) |
+| `agents/developer.md` | self-verification, testing, python, javascript, go | TDD implementation (Python, JS/TS, Go, Rust) |
 | `agents/architect.md` | pattern-transfer, code-reading, technical-debt | System design, ADRs, API contracts |
 | `agents/qa-security.md` | security, testing | 4-layer code review, STRIDE security audit |
 | `agents/devops.md` | domain-devops, security | CI/CD, IaC, deployment, monitoring |
@@ -143,6 +144,12 @@ Modern Python development: project structure with pyproject.toml, ruff for linti
 
 JavaScript and TypeScript development: project setup, ESLint/Prettier configuration, vitest/jest testing patterns, React hooks and component patterns, Node.js backend patterns, type guards and discriminated unions.
 
+### Go
+
+**Triggers**: "go project", "go module", "go mod", "goroutine", "channel", "go test", "golangci-lint", "go interface", "go error handling"
+
+Go development with idiomatic patterns: explicit error handling with wrapping and sentinel errors, concurrency via goroutines/channels/errgroup, interface design (small, consumer-defined), table-driven testing, project structure (cmd/internal/pkg), and golangci-lint configuration.
+
 ### Testing
 
 **Triggers**: "write tests", "TDD", "test coverage", "mock", "flaky test", "unit test", "integration test", "e2e test"
@@ -165,7 +172,7 @@ Infrastructure patterns and practices: Dockerfile optimization, CI/CD pipeline d
 
 ## How Skills Compose
 
-Skills don't work in isolation. When the Developer agent implements a Python feature:
+Skills don't work in isolation. When the Developer agent implements a feature (e.g., Python or Go):
 
 1. The agent's **inlined protocol** provides the TDD workflow and implementation discipline
 2. **python** skill provides language-specific idioms, tooling, and project structure

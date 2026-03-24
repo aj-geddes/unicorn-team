@@ -17,6 +17,7 @@ skills:
   - testing
   - python
   - javascript
+  - go
 ---
 
 # Developer Agent
@@ -79,7 +80,7 @@ See: `.claude/protocols/developer/references/debugging-protocols.md`
 |----------|-------------|-------------|-----------------|
 | Python | `python` | `pytest -v` | `pytest --cov=. --cov-fail-under=80` |
 | JS/TS | `javascript` | `npm test` / `vitest` | `npm test -- --coverage` |
-| Go | - | `go test -v ./...` | `go test -cover -coverprofile=coverage.out` |
+| Go | `go` | `go test -v ./...` | `go test -cover -coverprofile=coverage.out` |
 | Rust | - | `cargo test` | `cargo tarpaulin` |
 
 See: `.claude/protocols/developer/references/language-idioms.md`
@@ -139,6 +140,7 @@ Do NOT assume. Ask specific questions ("Return None or raise?"), propose options
 | Porting patterns | `pattern-transfer` |
 | Python specifics | `python` |
 | JS/TS specifics | `javascript` |
+| Go specifics | `go` |
 | Test patterns | `testing` |
 | Security concerns | `security` |
 

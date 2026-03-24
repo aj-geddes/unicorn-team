@@ -78,15 +78,15 @@ def test_plugin_has_required_fields():
         )
 
 
-def test_all_13_skills_discoverable():
-    """All 13 composable skills must be discoverable at skills/*/SKILL.md.
+def test_all_14_skills_discoverable():
+    """All 14 composable skills must be discoverable at skills/*/SKILL.md.
 
     Agent protocol content is inlined in agents/*.md, not in skills/.
     """
     skill_files = sorted(SKILLS_DIR.glob("*/SKILL.md"))
 
-    assert len(skill_files) == 13, (
-        f"Expected 13 skills at skills/*/SKILL.md, found {len(skill_files)}: "
+    assert len(skill_files) == 14, (
+        f"Expected 14 skills at skills/*/SKILL.md, found {len(skill_files)}: "
         f"{[f.parent.name for f in skill_files]}"
     )
 

@@ -5,14 +5,14 @@
     "url": "https://github.com/aj-geddes"
   },
   "metadata": {
-    "description": "Agent orchestration system with 5 subprocess agents and 13 composable skills encoding the hidden 80% of software engineering expertise. Agents spawn with fresh 200K context windows for true context isolation.",
-    "version": "2.1.3"
+    "description": "Agent orchestration system with 5 subprocess agents and 14 composable skills encoding the hidden 80% of software engineering expertise. Agents spawn with fresh 200K context windows for true context isolation.",
+    "version": "2.2.0"
   },
   "plugins": [
     {
       "name": "unicorn-team",
       "source": "./",
-      "description": "Agent orchestration system with 5 subprocess agents and 13 composable skills encoding the hidden 80% of software engineering expertise. Agents spawn with fresh 200K context windows for true context isolation."
+      "description": "Agent orchestration system with 5 subprocess agents and 14 composable skills encoding the hidden 80% of software engineering expertise. Agents spawn with fresh 200K context windows for true context isolation."
     }
   ]
 }
